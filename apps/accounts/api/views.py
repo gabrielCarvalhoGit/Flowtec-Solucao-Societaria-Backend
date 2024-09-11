@@ -1,12 +1,15 @@
 from django.contrib.auth import authenticate
 
-from rest_framework import serializers
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework import serializers, status
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from .serializers import UserSerializer
+from apps.accounts.services.user_service import UserService
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -30,12 +33,29 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_super_user(request):
+    serializer = UserSerializer(data=request.data)
+
+    if serializer.is_valid():
+        service = UserService()
+
+        user = service.create_super_user(**serializer.validated_data)
+        user_serializer = UserSerializer(user, many=False)
+
+        return Response({'user': user_serializer.data}, status=status.HTTP_200_OK)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_routes(request):
     routes = [
         '/api/accounts/token/',
-        '/api/accounts/token/refresh/'
+        '/api/accounts/token/refresh/',
+
+        '/api/accounts/create-super-user/'
     ]
 
     return Response(routes)

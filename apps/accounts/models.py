@@ -6,12 +6,13 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('O campo email é obrigatório.')
+            raise ValueError('O endereço de email deve ser fornecido')
         
         email = self.normalize_email(email)
         user = self.model(email=email, is_active=True, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
+
         return user
     
     def create_superuser(self, email, password=None, **extra_fields):
@@ -22,12 +23,14 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_custom_superuser = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = CustomUserManager()

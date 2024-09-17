@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 
     'apps.accounts',
+    'apps.contabilidades',
 ]
 
 REST_FRAMEWORK = {
@@ -141,3 +142,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+CNPJ_API_KEY = os.getenv('CNPJ_API_KEY')
+CNPJ_API_URL = os.getenv('CNPJ_API_URL')

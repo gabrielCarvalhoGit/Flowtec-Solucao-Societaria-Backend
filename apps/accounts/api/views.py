@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 
 from rest_framework.response import Response
 from rest_framework import serializers, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 
@@ -50,7 +51,7 @@ def create_super_user(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_routes(request):
+def api_overview(request):
     routes = [
         '/api/accounts/token/',
         '/api/accounts/token/refresh/',

@@ -1,15 +1,25 @@
 from django.utils.crypto import get_random_string
+
+from rest_framework.exceptions import ValidationError
+
 from apps.accounts.repositories.user_repository import UserRepository
+from apps.contabilidades.services.contabilidade_service import ContService
+
 
 class UserService:
     def __init__(self):
         self.repository = UserRepository()
+        self.contabilidade_service = ContService()
+    
+    def create_user_admin_cont(self, contabilidade_id, **validated_data):
+        if self.repository.validate_email(validated_data['email']):
+            raise ValidationError('Este e-mail já está em uso.')
+        
+        contabilidade = self.contabilidade_service.get_contabilidade(contabilidade_id)
 
-    def create_super_user(self, **kwargs):
-        password_temp = get_random_string(length=8)
+        validated_data['contabilidade'] = contabilidade
+        validated_data['is_admin_contabilidade'] = True
+        validated_data['password'] = get_random_string(length=8)
 
-        kwargs['is_custom_superuser'] = True
-        kwargs['password'] = password_temp
-
-        user = self.repository.create(**kwargs)
+        user = self.repository.create(**validated_data)
         return user

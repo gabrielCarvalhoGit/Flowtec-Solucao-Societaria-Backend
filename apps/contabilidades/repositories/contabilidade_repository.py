@@ -2,6 +2,12 @@ from apps.contabilidades.models import Contabilidade
 
 
 class ContRepository:
+    def get_by_id(self, id):
+        try:
+            return Contabilidade.objects.get(id=id)
+        except Contabilidade.DoesNotExist:
+            return 
+        
     def create(self, **validated_data):
         contabilidade = Contabilidade(**validated_data)
         contabilidade.save()

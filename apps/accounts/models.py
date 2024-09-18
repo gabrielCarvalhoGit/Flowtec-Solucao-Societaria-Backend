@@ -2,6 +2,8 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
+from apps.contabilidades.models import Contabilidade
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -23,6 +25,7 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    contabilidade = models.ForeignKey(Contabilidade, on_delete=models.CASCADE, null=True, blank=True)
     
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=100)
@@ -30,7 +33,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    is_custom_superuser = models.BooleanField(default=False)
+    is_admin_contabilidade = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = CustomUserManager()

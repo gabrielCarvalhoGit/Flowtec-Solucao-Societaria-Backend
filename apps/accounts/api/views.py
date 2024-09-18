@@ -2,14 +2,15 @@ from django.contrib.auth import authenticate
 
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer, CreateUserSerializer
+
 from apps.accounts.services.user_service import UserService
 
 
@@ -36,18 +37,23 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def create_super_user(request):
-    serializer = UserSerializer(data=request.data)
+def create_user_admin_cont(request, contabilidade_id):
+    serializer = CreateUserSerializer(data=request.data)
 
     if serializer.is_valid():
         service = UserService()
 
-        user = service.create_super_user(**serializer.validated_data)
-        user_serializer = UserSerializer(user, many=False)
+        try:
+            user = service.create_user_admin_cont(contabilidade_id, **serializer.validated_data)
+            user_serializer = UserSerializer(user, many=False)
 
-        return Response({'user': user_serializer.data}, status=status.HTTP_200_OK)
+            return Response({'user': user_serializer.data}, status=status.HTTP_200_OK)
+        except ValidationError as e:
+            return Response({'detail': str(e.detail[0])}, status=status.HTTP_400_BAD_REQUEST)
+        except NotFound as e:
+            return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
     
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

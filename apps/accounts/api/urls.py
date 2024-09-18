@@ -11,5 +11,5 @@ urlpatterns = [
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    path('create-super-user/', views.create_super_user, name='create_super_user'),
+    path('create-user-admin-contabilidade/<uuid:contabilidade_id>/', views.create_user_admin_cont, name='create_user_admin_contabilidade'),
 ]

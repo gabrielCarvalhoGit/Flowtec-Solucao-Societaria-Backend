@@ -1,8 +1,8 @@
 import re
 from datetime import datetime
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, NotFound
 
-from core.services.receitaws_service import ReceitaWsApiService
+from apps.core.services.receitaws_service import ReceitaWsApiService
 from apps.contabilidades.repositories.contabilidade_repository import ContRepository
 
 
@@ -11,6 +11,14 @@ class ContService:
         self.repository = ContRepository()
         self.api_service = ReceitaWsApiService()
     
+    def get_contabilidade(self, contabilidade_id):
+        contabilidade = self.repository.get_by_id(contabilidade_id)
+
+        if not contabilidade:
+            raise NotFound('Contabilidade não encontrada.')
+        
+        return contabilidade
+
     def create_cont(self, **validated_data):
         cnpj = self.validate_cnpj(validated_data['cnpj'])
         cont_data = self.api_service.get_data_cnpj(cnpj)

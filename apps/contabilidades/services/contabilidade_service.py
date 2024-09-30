@@ -1,7 +1,7 @@
-import re
 from datetime import datetime
 from rest_framework.exceptions import ValidationError, NotFound
 
+from apps.contabilidades.models import Contabilidade
 from apps.core.services.receitaws_service import ReceitaWsApiService
 from apps.contabilidades.repositories.contabilidade_repository import ContRepository
 
@@ -12,15 +12,18 @@ class ContService:
         self.api_service = ReceitaWsApiService()
     
     def get_contabilidade(self, contabilidade_id):
-        contabilidade = self.repository.get_by_id(contabilidade_id)
-
-        if not contabilidade:
+        try:
+            contabilidade = self.repository.get_by_id(contabilidade_id)
+            return contabilidade
+        except Contabilidade.DoesNotExist:
             raise NotFound('Contabilidade não encontrada.')
-        
-        return contabilidade
 
     def create_cont(self, **validated_data):
-        cnpj = self.validate_cnpj(validated_data['cnpj'])
+        cnpj = self.api_service.validate_cnpj(validated_data['cnpj'])
+
+        if self.repository.is_cont_exists(cnpj):
+            raise ValidationError('O CNPJ informado já possui uma contabilidade cadastrada.')
+        
         cont_data = self.api_service.get_data_cnpj(cnpj)
 
         validated_data['cnpj'] = cnpj
@@ -42,14 +45,3 @@ class ContService:
 
         contabilidade = self.repository.create(**validated_data)
         return contabilidade
-    
-    def validate_cnpj(self, cnpj):
-        cnpj = re.sub(r'\D', '', cnpj)
-
-        if len(cnpj) != 14:
-            raise ValidationError('CNPJ deve ter 14 dígitos.')
-        
-        if self.repository.is_cont_exists(cnpj):
-            raise ValidationError('O CNPJ informado já possui uma contabilidade cadastrada.')
-        
-        return cnpj

@@ -1,7 +1,10 @@
+import uuid
 from django.db import models
 
 
 class BaseModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     cnpj = models.CharField(max_length=14, unique=True)
     abertura = models.DateField()
     situacao = models.CharField(max_length=15)

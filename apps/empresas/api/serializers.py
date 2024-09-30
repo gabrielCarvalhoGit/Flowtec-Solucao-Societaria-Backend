@@ -1,14 +1,15 @@
 from rest_framework import serializers
-from apps.contabilidades.models import Contabilidade
+from apps.empresas.models import Empresa
 
 
-class ContSerializer(serializers.ModelSerializer):
+class EmpresaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Contabilidade
+        model = Empresa
         fields = '__all__'
 
-class ContCreateSerializer(serializers.Serializer):
+class EmpresaCreateSerializer(serializers.Serializer):
     cnpj = serializers.CharField(max_length=18, required=True)
+    contabilidade_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=True)
 
     def to_internal_value(self, data):
         allowed_fields = set(self.fields.keys())
@@ -17,4 +18,4 @@ class ContCreateSerializer(serializers.Serializer):
             if field not in allowed_fields:
                 raise serializers.ValidationError({field: 'Parâmetro inválido.'})
             
-        return super().to_internal_value(data)
+        return super().to_internal_value(data) 

@@ -1,4 +1,6 @@
+import re
 import requests
+
 from django.conf import settings
 from rest_framework.exceptions import ValidationError
 
@@ -27,3 +29,11 @@ class ReceitaWsApiService:
             raise ValidationError('A requisição para a API da ReceitaWS expirou.')
         except requests.exceptions.RequestException as e:
             raise ValidationError(f'Erro ao consultar API da ReceitaWS: {str(e)}')
+        
+    def validate_cnpj(self, cnpj):
+        cnpj = re.sub(r'\D', '', cnpj)
+
+        if len(cnpj) != 14:
+            raise ValidationError('CNPJ deve ter 14 dígitos.')
+        
+        return cnpj

@@ -1,10 +1,11 @@
-import uuid
 from django.db import models
+
 from apps.core.models import BaseModel
+from apps.contabilidades.models import Contabilidade
 
 
 class Empresa(BaseModel):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    contabilidade = models.ForeignKey(Contabilidade, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.nome

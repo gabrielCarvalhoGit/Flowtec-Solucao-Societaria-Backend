@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Empresa',
             fields=[
+                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('cnpj', models.CharField(max_length=14, unique=True)),
                 ('abertura', models.DateField()),
                 ('situacao', models.CharField(max_length=15)),
@@ -29,7 +30,6 @@ class Migration(migrations.Migration):
                 ('cep', models.CharField(max_length=10)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
             ],
             options={
                 'abstract': False,

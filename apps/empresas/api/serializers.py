@@ -3,6 +3,8 @@ from apps.empresas.models import Empresa
 
 
 class EmpresaSerializer(serializers.ModelSerializer):
+    contabilidade = serializers.CharField(source='contabilidade.nome', read_only=True)
+    
     class Meta:
         model = Empresa
         fields = '__all__'

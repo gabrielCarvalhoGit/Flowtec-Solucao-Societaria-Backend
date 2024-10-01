@@ -13,3 +13,6 @@ class CreateUserSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=50, required=True)
     last_name = serializers.CharField(max_length=100, required=True)
     email = serializers.EmailField(required=True)
+
+    contabilidade_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=False)
+    is_admin_contabilidade = serializers.BooleanField(default=False)

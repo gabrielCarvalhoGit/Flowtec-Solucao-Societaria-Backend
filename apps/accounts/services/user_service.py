@@ -11,6 +11,13 @@ class UserService:
         self.repository = UserRepository()
         self.contabilidade_service = ContService()
     
+    def create_user(self, request, **validated_data):
+        if validated_data['is_admin_contabilidade'] and not validated_data['contabilidade_id']:
+            raise ValidationError('')
+
+        if self.repository.validate_email(validated_data['email']):
+            raise ValidationError('Este e-mail já está em uso.')
+
     def create_user_admin_cont(self, contabilidade_id, **validated_data):
         if self.repository.validate_email(validated_data['email']):
             raise ValidationError('Este e-mail já está em uso.')

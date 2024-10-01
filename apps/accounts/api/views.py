@@ -55,6 +55,14 @@ def create_user_admin_cont(request, contabilidade_id):
     
     return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_user(request):
+    serializer = CreateUserSerializer(data=request.data)
+
+    if serializer.is_valid():
+        service = UserService()
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def api_overview(request):

@@ -27,7 +27,7 @@ class ContService:
         cont_data = self.api_service.get_data_cnpj(cnpj)
 
         validated_data['cnpj'] = cnpj
-        validated_data['abertura'] = datetime.strptime(cont_data.get('abertura', ''), '%d/%m/%Y').strftime('%Y-%m-%d')
+        validated_data['data_abertura'] = datetime.strptime(cont_data.get('abertura', ''), '%d/%m/%Y').strftime('%Y-%m-%d')
         validated_data['situacao'] = cont_data.get('situacao', '')
         validated_data['tipo'] = cont_data.get('tipo', '')
         validated_data['nome'] = cont_data.get('nome', '')

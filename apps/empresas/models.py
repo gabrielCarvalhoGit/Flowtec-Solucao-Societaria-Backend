@@ -14,9 +14,14 @@ class AberturaEmpresa(models.Model):
 
     atividade_principal = models.CharField(max_length=150)
 
+    cep = models.CharField(max_length=9)
+
     responsavel = models.CharField(max_length=100)
     email = models.EmailField(unique=False)
     telefone = models.CharField(max_length=12)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class Empresa(BaseModel):
     contabilidade = models.ForeignKey(Contabilidade, on_delete=models.CASCADE, null=True)

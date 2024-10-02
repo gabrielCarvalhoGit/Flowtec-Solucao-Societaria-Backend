@@ -12,4 +12,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     path('create-user-admin-contabilidade/<uuid:contabilidade_id>/', views.create_user_admin_cont, name='create_user_admin_contabilidade'),
+    path('create-user/', views.create_user, name='create_user'),
+    path('update-user/<uuid:id>'),
 ]

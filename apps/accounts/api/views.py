@@ -1,3 +1,4 @@
+from uuid import UUID
 from django.contrib.auth import authenticate
 
 from rest_framework.response import Response
@@ -37,14 +38,14 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def create_user_admin_cont(request, contabilidade_id):
+def create_user(request):
     serializer = CreateUserSerializer(data=request.data)
 
     if serializer.is_valid():
         service = UserService()
 
         try:
-            user = service.create_user_admin_cont(contabilidade_id, **serializer.validated_data)
+            user = service.create_user(**serializer.validated_data)
             user_serializer = UserSerializer(user, many=False)
 
             return Response({'user': user_serializer.data}, status=status.HTTP_200_OK)
@@ -52,16 +53,16 @@ def create_user_admin_cont(request, contabilidade_id):
             return Response({'detail': str(e.detail[0])}, status=status.HTTP_400_BAD_REQUEST)
         except NotFound as e:
             return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
-    
-    return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def create_user(request):
-    serializer = CreateUserSerializer(data=request.data)
+def update_user(request, id):
+    service = UserService()
 
-    if serializer.is_valid():
-        service = UserService()
+    try:
+        user = service.get_user(id)
+    except NotFound as e:
+        return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

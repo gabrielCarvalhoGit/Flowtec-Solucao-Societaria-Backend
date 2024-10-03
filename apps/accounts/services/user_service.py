@@ -12,9 +12,9 @@ class UserService:
         self.repository = UserRepository()
         self.contabilidade_service = ContService()
     
-    def get_user(self, id):
+    def get_user(self, user_id):
         try:
-            user = self.repository.get_by_id(id)
+            user = self.repository.get_by_id(user_id)
             return user
         except User.DoesNotExist:
             raise NotFound('Usuário não encontrado.')
@@ -36,5 +36,10 @@ class UserService:
         user = self.repository.create(**validated_data)
         return user
     
-    def update_user(self, id, **validated_data):
-        pass
+    def update_user(self, user_id, **validated_data):
+        user = self.get_user(user_id)
+        return self.repository.update(user, **validated_data)
+    
+    def delete_user(self, user_id):
+        user = self.get_user(user_id)
+        self.repository.delete(user)

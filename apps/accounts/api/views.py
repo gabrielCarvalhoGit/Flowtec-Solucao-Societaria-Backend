@@ -93,7 +93,7 @@ def delete_user(request, id):
         service.delete_user(id)
         return Response({'detail': 'Usuário excluido com sucesso.'}, status=status.HTTP_200_OK)
     except NotFound as e:
-         return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -101,9 +101,11 @@ def api_overview(request):
     routes = [
         '/api/accounts/token/',
         '/api/accounts/token/refresh/',
-
-        '/api/accounts/create-user/'
-        '/api/accounts/update-user/'
+        
+        '/api/accounts/get-user/',
+        '/api/accounts/create-user/',
+        '/api/accounts/update-user/',
+        '/api/accounts/delete-user/'
     ]
 
     return Response(routes)

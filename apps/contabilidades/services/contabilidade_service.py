@@ -45,3 +45,7 @@ class ContService:
 
         contabilidade = self.repository.create(**validated_data)
         return contabilidade
+    
+    def delete_cont(self, contabilidade_id):
+        cont = self.get_contabilidade(contabilidade_id)
+        self.repository.delete(cont)

@@ -11,5 +11,8 @@ class ContRepository:
 
         return contabilidade
     
+    def delete(self, contabilidade):
+        contabilidade.delete()
+    
     def is_cont_exists(self, cnpj):
         return Contabilidade.objects.filter(cnpj=cnpj).exists()

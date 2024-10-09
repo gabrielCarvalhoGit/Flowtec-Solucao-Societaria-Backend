@@ -28,12 +28,46 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         user = authenticate(email=email, password=password)
 
         if user is None:
-            raise serializers.ValidationError({'detail': 'Email ou senha inválido.'})
+            raise serializers.ValidationError()
         
         return super().validate(attrs)
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError:
+            return Response({'detail': 'E-mail ou senha inválida.'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        refresh = serializer.validated_data.get('refresh')
+        access = serializer.validated_data.get('access')
+
+        response = Response({
+            'refresh': refresh,
+            'access': access
+        })
+
+        response.set_cookie(
+            key='access_token',
+            value=access,
+            httponly=True,
+            secure=True,
+            samesite='None'
+        )
+
+        response.set_cookie(
+            key='refresh_token',
+            value=refresh,
+            httponly=True,
+            secure=True,
+            samesite='None'
+        )
+
+        return response
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

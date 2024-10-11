@@ -18,6 +18,14 @@ class ContService:
         except Contabilidade.DoesNotExist:
             raise NotFound('Contabilidade não encontrada.')
 
+    def get_list_contabilidades(self):
+        empresas = self.repository.get_contabilidades()
+
+        if not empresas:
+            raise NotFound('Nenhuma contabilidade cadastrada.')
+        
+        return empresas
+
     def create_cont(self, **validated_data):
         cnpj = self.api_service.validate_cnpj(validated_data['cnpj'])
 

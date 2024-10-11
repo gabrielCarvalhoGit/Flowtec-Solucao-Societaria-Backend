@@ -83,11 +83,13 @@ def logout_user(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_user(request, id):
+def get_user(request):
     service = UserService()
 
+    user_id = request.query_params.get('id', None)
+
     try:
-        user = service.get_user(id)
+        user = service.get_user(user_id, request)
         user_serializer = UserSerializer(user, many=False)
 
         return Response({'user': user_serializer.data}, status=status.HTTP_200_OK)
@@ -111,6 +113,8 @@ def create_user(request):
             return Response({'detail': str(e.detail[0])}, status=status.HTTP_400_BAD_REQUEST)
         except NotFound as e:
             return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
+    
+    return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])

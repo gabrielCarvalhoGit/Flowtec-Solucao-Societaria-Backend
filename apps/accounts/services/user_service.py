@@ -12,12 +12,15 @@ class UserService:
         self.repository = UserRepository()
         self.contabilidade_service = ContService()
     
-    def get_user(self, user_id):
-        try:
-            user = self.repository.get_by_id(user_id)
-            return user
-        except User.DoesNotExist:
-            raise NotFound('Usuário não encontrado.')
+    def get_user(self, user_id=None, request=None):
+        if user_id:
+            try:
+                user = self.repository.get_by_id(user_id)
+                return user
+            except User.DoesNotExist:
+                raise NotFound('Usuário não encontrado.')
+        else:
+            return request.user
     
     def create_user(self, **validated_data):
         contabilidade_id = validated_data.get('contabilidade_id')

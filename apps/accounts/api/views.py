@@ -12,6 +12,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .serializers import UserSerializer, CreateUserSerializer, UpdateUserSerializer
 
 from apps.accounts.services.user_service import UserService
+from apps.accounts.services.auth_service import AuthenticationService
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -68,6 +69,17 @@ class MyTokenObtainPairView(TokenObtainPairView):
         )
 
         return response
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_user(request):
+    service = AuthenticationService()
+
+    try:
+        service.logout(request)
+        return Response({'detail': 'Logout successful.'}, status=status.HTTP_200_OK)
+    except ValidationError as e:
+        return Response({'detail': str(e.detail[0])}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

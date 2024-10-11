@@ -21,6 +21,11 @@ def get_contabilidade(request, id):
     except NotFound as e:
         return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_list_contabilidades(request):
+    pass
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_contabilidade(request):

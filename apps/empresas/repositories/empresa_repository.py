@@ -1,4 +1,4 @@
-from apps.empresas.models import Empresa, AberturaEmpresa
+from apps.empresas.models import Empresa
 
 
 class EmpresaRepository:
@@ -11,11 +11,11 @@ class EmpresaRepository:
 
         return empresa
     
-    def create_empresa_process(self, **validated_data):
-        empresa = AberturaEmpresa(**validated_data)
-        empresa.save()
+    # def create_empresa_process(self, **validated_data):
+    #     empresa = AberturaEmpresa(**validated_data)
+    #     empresa.save()
 
-        return empresa
+    #     return empresa
     
     def delete(self, empresa):
         empresa.delete()

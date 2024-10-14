@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 
 from apps.empresas.services.empresa_service import EmpresaService
-from apps.empresas.api.serializers import EmpresaSerializer, EmpresaCreateSerializer, AberturaEmpresaCreateSerializer
+from apps.empresas.api.serializers import EmpresaSerializer, EmpresaCreateSerializer
 
 
 @api_view(['GET'])
@@ -52,23 +52,23 @@ def delete_empresa(request, id):
     except NotFound as e:
         return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
     
-@api_view(['POST'])
-def create_empresa_formulario(request):
-    serializer = AberturaEmpresaCreateSerializer(data=request.data)
+# @api_view(['POST'])
+# def create_empresa_formulario(request):
+#     serializer = AberturaEmpresaCreateSerializer(data=request.data)
 
-    if serializer.is_valid():
-        service = EmpresaService()
+#     if serializer.is_valid():
+#         service = EmpresaService()
 
-        try:
-            empresa = service.create_empresa_form(**serializer.validated_data)
-            empresa_serializer = AberturaEmpresaCreateSerializer(empresa)
+#         try:
+#             empresa = service.create_empresa_form(**serializer.validated_data)
+#             empresa_serializer = AberturaEmpresaCreateSerializer(empresa)
 
-            return Response({'empresa': empresa_serializer.data}, status=status.HTTP_201_CREATED)
-        except ValidationError as e:
-            return Response({'detail': str(e.detail[0])}, status=status.HTTP_400_BAD_REQUEST)
-        except NotFound as e:
-            return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
+#             return Response({'empresa': empresa_serializer.data}, status=status.HTTP_201_CREATED)
+#         except ValidationError as e:
+#             return Response({'detail': str(e.detail[0])}, status=status.HTTP_400_BAD_REQUEST)
+#         except NotFound as e:
+#             return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
 
-    return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+#     return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     

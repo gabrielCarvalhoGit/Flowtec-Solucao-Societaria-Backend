@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.empresas.models import Empresa, AberturaEmpresa
+from apps.empresas.models import Empresa
 
 
 class EmpresaSerializer(serializers.ModelSerializer):
@@ -22,17 +22,17 @@ class EmpresaCreateSerializer(serializers.Serializer):
             
         return super().to_internal_value(data) 
     
-class AberturaEmpresaCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AberturaEmpresa
-        fields = [
-            'nome_primario', 
-            'nome_secundario', 
-            'nome_terciario', 
-            'atividade_principal', 
-            'cep', 
-            'responsavel', 
-            'email', 
-            'telefone'
-        ]
+# class AberturaEmpresaCreateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = AberturaEmpresa
+#         fields = [
+#             'nome_primario', 
+#             'nome_secundario', 
+#             'nome_terciario', 
+#             'atividade_principal', 
+#             'cep', 
+#             'responsavel', 
+#             'email', 
+#             'telefone'
+#         ]
 

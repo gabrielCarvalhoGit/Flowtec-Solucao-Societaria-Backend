@@ -7,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'contabilidade', 'is_admin_contabilidade', 'date_joined']
+        fields = ['id', 'first_name', 'last_name', 'email', 'contabilidade', 'is_admin_contabilidade', 'date_joined', 'profile_picture']
 
 class CreateUserSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=50, required=True)
@@ -29,6 +29,7 @@ class CreateUserSerializer(serializers.Serializer):
 class UpdateUserSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=50, required=False)
     last_name = serializers.CharField(max_length=100, required=False)
+    profile_picture = serializers.ImageField(required=False, allow_null=True)
 
     def to_internal_value(self, data):
         allowed_fields = set(self.fields.keys())

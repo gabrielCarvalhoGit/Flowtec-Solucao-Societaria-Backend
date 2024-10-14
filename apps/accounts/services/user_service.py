@@ -39,8 +39,7 @@ class UserService:
         user = self.repository.create(**validated_data)
         return user
     
-    def update_user(self, user_id, **validated_data):
-        user = self.get_user(user_id)
+    def update_user(self, user, **validated_data):
         return self.repository.update(user, **validated_data)
     
     def delete_user(self, user_id):

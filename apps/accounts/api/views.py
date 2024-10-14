@@ -85,7 +85,6 @@ def logout_user(request):
 @permission_classes([IsAuthenticated])
 def get_user(request):
     service = UserService()
-
     user_id = request.query_params.get('id', None)
 
     try:
@@ -118,21 +117,23 @@ def create_user(request):
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
-def update_user(request, id):
-    serializer = UpdateUserSerializer(data=request.data, partial=True)
+def update_user(request):
+    service = UserService()
+    user_id = request.query_params.get('id', None)
 
-    if serializer.is_valid():
-        service = UserService()
+    try:
+        user = service.get_user(user_id, request)
+        serializer = UpdateUserSerializer(instance=user, data=request.data, partial=True)
 
-        try:
-            user = service.update_user(id, **serializer.validated_data)
-            user_serializer = UserSerializer(user, many=False)
+        if serializer.is_valid():
+            updated_user = service.update_user(user, **serializer.validated_data)
+            user_serializer = UserSerializer(updated_user, many=False)
 
             return Response({'user': user_serializer.data}, status=status.HTTP_200_OK)
-        except NotFound as e:
-            return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
         
-    return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    except NotFound as e:
+        return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])

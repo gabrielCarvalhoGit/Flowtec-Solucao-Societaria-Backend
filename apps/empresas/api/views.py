@@ -51,24 +51,3 @@ def delete_empresa(request, id):
         return Response({'detail': 'Empresa excluida com sucesso.'}, status=status.HTTP_200_OK)
     except NotFound as e:
         return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
-    
-# @api_view(['POST'])
-# def create_empresa_formulario(request):
-#     serializer = AberturaEmpresaCreateSerializer(data=request.data)
-
-#     if serializer.is_valid():
-#         service = EmpresaService()
-
-#         try:
-#             empresa = service.create_empresa_form(**serializer.validated_data)
-#             empresa_serializer = AberturaEmpresaCreateSerializer(empresa)
-
-#             return Response({'empresa': empresa_serializer.data}, status=status.HTTP_201_CREATED)
-#         except ValidationError as e:
-#             return Response({'detail': str(e.detail[0])}, status=status.HTTP_400_BAD_REQUEST)
-#         except NotFound as e:
-#             return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
-
-#     return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
-    

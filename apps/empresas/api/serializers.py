@@ -21,18 +21,3 @@ class EmpresaCreateSerializer(serializers.Serializer):
                 raise serializers.ValidationError({field: 'Parâmetro inválido.'})
             
         return super().to_internal_value(data) 
-    
-# class AberturaEmpresaCreateSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = AberturaEmpresa
-#         fields = [
-#             'nome_primario', 
-#             'nome_secundario', 
-#             'nome_terciario', 
-#             'atividade_principal', 
-#             'cep', 
-#             'responsavel', 
-#             'email', 
-#             'telefone'
-#         ]
-

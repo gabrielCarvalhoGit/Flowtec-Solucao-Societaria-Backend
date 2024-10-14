@@ -7,7 +7,6 @@ from apps.empresas.models import Empresa
 from apps.empresas.repositories.empresa_repository import EmpresaRepository
 
 from apps.contabilidades.services.contabilidade_service import ContService
-from apps.contabilidades.repositories.contabilidade_repository import ContRepository
 
 
 class EmpresaService:
@@ -54,12 +53,7 @@ class EmpresaService:
 
         empresa = self.repository.create(**validated_data)
         return empresa
-    
-    def create_empresa_form(self, **validated_data):
-        empresa = self.repository.create_empresa_process(**validated_data)
-        return empresa
         
-    
     def delete_empresa(self, empresa_id):
         empresa = self.get_empresa(empresa_id)
         self.repository.delete(empresa)

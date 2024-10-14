@@ -11,12 +11,6 @@ class EmpresaRepository:
 
         return empresa
     
-    # def create_empresa_process(self, **validated_data):
-    #     empresa = AberturaEmpresa(**validated_data)
-    #     empresa.save()
-
-    #     return empresa
-    
     def delete(self, empresa):
         empresa.delete()
     

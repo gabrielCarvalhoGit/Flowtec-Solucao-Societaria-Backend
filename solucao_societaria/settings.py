@@ -155,3 +155,9 @@ CORS_ALLOWED_ORIGINS = [
 
 CNPJ_API_KEY = os.getenv('CNPJ_API_KEY')
 CNPJ_API_URL = os.getenv('CNPJ_API_URL')
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+CORS_ALLOW_CREDENTIALS = True

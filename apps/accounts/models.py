@@ -25,12 +25,12 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    contabilidade = models.ForeignKey(Contabilidade, on_delete=models.CASCADE, null=True, blank=True)
+    contabilidade = models.ForeignKey(Contabilidade, on_delete=models.CASCADE, null=True)
     
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures', null=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

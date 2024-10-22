@@ -44,7 +44,7 @@ class Processos(models.Model):
 
     status_processo = models.BooleanField(default=False)
 
-class EtapaProcesso(models.Model):
+class EtapaProcessos(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     etapa = models.ForeignKey(Etapas, on_delete=models.CASCADE)

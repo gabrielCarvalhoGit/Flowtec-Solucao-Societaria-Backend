@@ -2,8 +2,8 @@ from django.contrib.auth import authenticate
 
 from rest_framework.response import Response
 from rest_framework import serializers, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound, ValidationError
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -147,11 +147,14 @@ def delete_user(request, id):
         return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def api_overview(request):
     routes = [
+        '/api/accounts/',
+        
         '/api/accounts/token/',
         '/api/accounts/token/refresh/',
+        'api/accounts/token/logout/',
         
         '/api/accounts/get-user/',
         '/api/accounts/create-user/',

@@ -67,7 +67,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 
     'AUTH_COOKIE': 'access_token',
-    # 'AUTH_COOKIE_SECURE': True,
+    #'AUTH_COOKIE_SECURE': False,
     'AUTH_COOKIE_HTTP_ONLY': True,
     'AUTH_COOKIE_SAMESITE': 'None',
 }
@@ -132,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Sao_Paulo'
 
@@ -154,12 +154,5 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
-
 CNPJ_API_KEY = os.getenv('CNPJ_API_KEY')
 CNPJ_API_URL = os.getenv('CNPJ_API_URL')
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
-
-CORS_ALLOW_CREDENTIALS = True

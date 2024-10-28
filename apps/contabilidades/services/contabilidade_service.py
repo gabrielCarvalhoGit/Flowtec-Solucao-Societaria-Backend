@@ -11,7 +11,13 @@ class ContService:
         self.repository = ContRepository()
         self.api_service = ReceitaWsApiService()
     
-    def get_contabilidade(self, contabilidade_id):
+    def get_contabilidade(self, contabilidade_id=None, request=None):
+        if not contabilidade_id:
+            if request.user.contabilidade:
+                return request.user.contabilidade
+            else:
+                raise NotFound('Nenhuma contabilidadade encontrada. Verifique se o usuário está vinculado a uma contabilidade ou informe o id da contabilidade que deseja consultar.')
+        
         try:
             contabilidade = self.repository.get_by_id(contabilidade_id)
             return contabilidade

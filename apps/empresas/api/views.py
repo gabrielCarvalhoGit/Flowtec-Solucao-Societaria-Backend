@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError, NotFound
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 
 from apps.empresas.services.empresa_service import EmpresaService
@@ -51,3 +51,16 @@ def delete_empresa(request, id):
         return Response({'detail': 'Empresa excluida com sucesso.'}, status=status.HTTP_200_OK)
     except NotFound as e:
         return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def api_overview(request):
+    routes = [
+        '/api/empresas/',
+        
+        '/api/empresas/create-empresa/',
+        'api/empresas/get-empresa/',
+        '/api/empresas/delete-empresa/'
+    ]
+
+    return Response(routes)

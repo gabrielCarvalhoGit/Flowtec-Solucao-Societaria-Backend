@@ -1,11 +1,12 @@
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import ValidationError, NotFound
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 
-from apps.contabilidades.api.serializers import ContSerializer, ContCreateSerializer
+from .serializers import ContSerializer, ContCreateSerializer
+
 from apps.contabilidades.services.contabilidade_service import ContService
 
 
@@ -16,11 +17,12 @@ class CustomPagePagination(PageNumberPagination):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_contabilidade(request, id):
+def get_contabilidade(request):
     service = ContService()
+    contabilidade_id = request.query_params.get('contabilidade_id', None)
 
     try:
-        contabilidade = service.get_contabilidade(id)
+        contabilidade = service.get_contabilidade(contabilidade_id, request)
         cont_serializer = ContSerializer(contabilidade, many=False)
 
         return Response({'contabilidade': cont_serializer.data}, status=status.HTTP_200_OK)
@@ -78,12 +80,15 @@ def delete_contabilidade(request, id):
         return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def api_overview(request):
     routes = [
-        
-        '/api/contabilidades/get-contabilidade/',
+        '/api/contabilidades/',
+        '/api/contabilidades/list-contabilidades/',
+
         '/api/contabilidades/create-contabilidade/',
+        '/api/contabilidades/get-contabilidade/',
+        '/api/contabilidades/delete-contabilidade/'
     ]
 
     return Response(routes)

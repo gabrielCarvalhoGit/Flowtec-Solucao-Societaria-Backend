@@ -1,5 +1,8 @@
 import uuid
+from datetime import timedelta
+
 from django.db import models
+from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 
 from apps.contabilidades.models import Contabilidade
@@ -8,7 +11,7 @@ from rest_framework.exceptions import ValidationError
 
 class Etapa(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    nome_etapa = models.CharField(max_length=14)
+    nome_etapa = models.CharField(max_length=20)
 
 class Endereco(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -55,11 +58,63 @@ class AberturaEmpresa(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    expire_at = models.DateTimeField()
     
     def clean(self):
         if self.opcoes_nomes_empresa and len(self.opcoes_nomes_empresa) > 3:
             raise ValidationError('Você só pode adicionar até 3 nomes.')
-        
+    
+    def save(self, *args, **kwargs):
+        if not self.expire_at:
+            self.expire_at = timezone.now() + timedelta(days=90)
+
+        super().save(*args, **kwargs)
+
+class Socios(models.Model):
+    ESTADO_CIVIL_CHOICES = [
+        ('solteiro', 'Solteiro'),
+        ('casado', 'Casado'),
+        ('separado', 'Separado judicialmente'),
+        ('divorciado', 'Divorciado'),
+        ('viuvo', 'Viúvo')
+    ]
+
+    REGIME_CASAMENTO_CHOICES = [
+        ('separacao_total', 'Separação total de bens'),
+        ('comunhao_parcial', 'Comunhão parcial de bens'),
+        ('comunhao_universal', 'Comunhão universal de bens'),
+        ('participacao_final', 'Participação final nos aquestos')
+    ]
+
+    TIPO_ADMINISTRADOR_CHOICES = [
+        ('conjunto', 'Conjunto'),
+        ('isoladamente', 'Isoladamente'),
+        ('nao_aplica', 'Não se aplica')
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    empresa = models.ForeignKey(AberturaEmpresa, on_delete=models.CASCADE)
+
+    nome = models.CharField(max_length=100)
+    nacionalidade = models.CharField(max_length=25)
+    data_nascimento = models.DateField()
+
+    estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES)
+    regime_casamento = models.CharField(max_length=20, choices=REGIME_CASAMENTO_CHOICES, blank=True, null=True)
+
+    profissao = models.CharField(max_length=50)
+
+    cpf = models.CharField(max_length=11)
+    rg = models.CharField(max_length=14)
+    orgao_expedidor = models.CharField(max_length=8)
+    uf = models.CharField(max_length=2)
+
+    administrador = models.BooleanField(default=False)
+    tipo_administrador = models.CharField(max_length=15, choices=TIPO_ADMINISTRADOR_CHOICES)
+    
+    qtd_cotas = models.IntegerField()
+    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)
+
 class NomeProcesso(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nome_processo = models.CharField(max_length=80)

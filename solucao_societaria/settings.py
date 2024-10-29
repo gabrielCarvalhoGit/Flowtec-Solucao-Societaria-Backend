@@ -45,6 +45,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
+    'EXCEPTION_HANDLER': 'infra.exception_handler.custom_exception_handler',
 }
 
 SIMPLE_JWT = {

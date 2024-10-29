@@ -1,24 +1,23 @@
 from django.utils.crypto import get_random_string
-
 from rest_framework.exceptions import ValidationError, NotFound
 
-from apps.accounts.models import User
+from apps.core.services.base_service import ServiceBase
 from apps.accounts.repositories.user_repository import UserRepository
 from apps.contabilidades.services.contabilidade_service import ContService
 
 
-class UserService:
+class UserService(metaclass=ServiceBase):
     def __init__(self):
         self.repository = UserRepository()
         self.contabilidade_service = ContService()
     
     def get_user(self, user_id=None, request=None):
         if user_id:
-            try:
-                user = self.repository.get_by_id(user_id)
-                return user
-            except User.DoesNotExist:
+            user = self.repository.get_by_id(user_id)
+
+            if not user:
                 raise NotFound('Usuário não encontrado.')
+            return user
         else:
             return request.user
     
@@ -26,9 +25,9 @@ class UserService:
         contabilidade_id = validated_data.get('contabilidade_id')
 
         if not contabilidade_id:
-            raise ValidationError('Para cadastrar um usuário em uma contabilidade, é necessário informar a contabilidade associada.')
+            raise ValidationError({'contabilidade_id': ["Este campo é obrigatório."]})
         
-        if self.repository.validate_email(validated_data['email']):
+        if self.repository.exists_by_email(validated_data['email']):
             raise ValidationError('Este e-mail já está em uso.')
         
         contabilidade = self.contabilidade_service.get_contabilidade(contabilidade_id)
@@ -42,6 +41,7 @@ class UserService:
     def update_user(self, user, **validated_data):
         return self.repository.update(user, **validated_data)
     
-    def delete_user(self, user_id):
-        user = self.get_user(user_id)
-        self.repository.delete(user)
+    # def delete_user(self, user_id):
+    #     if not user_id:
+    #         raise ValidationError()
+    #     self.repository.delete(user)

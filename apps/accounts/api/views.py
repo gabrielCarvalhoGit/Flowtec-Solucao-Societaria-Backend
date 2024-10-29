@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import NotFound, ValidationError, APIException
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -87,13 +87,10 @@ def get_user(request):
     service = UserService()
     user_id = request.query_params.get('id', None)
 
-    try:
-        user = service.get_user(user_id, request)
-        user_serializer = UserSerializer(user, many=False)
+    user = service.get_user(user_id, request)
+    user_serializer = UserSerializer(user, many=False)
 
-        return Response({'user': user_serializer.data}, status=status.HTTP_200_OK)
-    except NotFound as e:
-         return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
+    return Response({'user': user_serializer.data}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -108,10 +105,13 @@ def create_user(request):
             user_serializer = UserSerializer(user, many=False)
 
             return Response({'user': user_serializer.data}, status=status.HTTP_200_OK)
-        except ValidationError as e:
-            return Response({'detail': str(e.detail[0])}, status=status.HTTP_400_BAD_REQUEST)
         except NotFound as e:
             return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError as e:
+            error_detail = str(e.detail) if isinstance(e.detail, dict) else str(e.detail[0])
+            return Response({'detail': error_detail}, status=status.HTTP_400_BAD_REQUEST)
+        except APIException as e:
+            return Response({'detail': str(e.detail)}, status=status.HTTP_400_BAD_REQUEST)
     
     return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -134,17 +134,20 @@ def update_user(request):
         return Response({'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     except NotFound as e:
         return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
+    except APIException as e:
+        return Response({'detail': str(e.detail)}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
-def delete_user(request, id):
-    service = UserService()
+# @api_view(['DELETE'])
+# @permission_classes([IsAuthenticated])
+# def delete_user(request, id):
+#     service = UserService()
+#     user_id = request.query_params.get('id', None)
 
-    try:
-        service.delete_user(id)
-        return Response({'detail': 'Usuário excluido com sucesso.'}, status=status.HTTP_200_OK)
-    except NotFound as e:
-        return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
+#     try:
+#         service.delete_user(id)
+#         return Response({'detail': 'Usuário excluido com sucesso.'}, status=status.HTTP_200_OK)
+#     except NotFound as e:
+#         return Response({'detail': str(e.detail)}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

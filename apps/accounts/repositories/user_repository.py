@@ -3,8 +3,11 @@ from apps.accounts.models import User
 
 class UserRepository:
     def get_by_id(self, user_id):
-        return User.objects.get(id=user_id)
-    
+        try:
+            return User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return None
+
     def create(self, **validated_data):
         return User.objects.create_user(**validated_data)
     
@@ -23,5 +26,5 @@ class UserRepository:
     def delete(self, user):
         user.delete()
 
-    def validate_email(self, email):
+    def exists_by_email(self, email):
         return User.objects.filter(email=email).exists()

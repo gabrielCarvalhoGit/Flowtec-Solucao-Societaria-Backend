@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 from apps.contabilidades.models import Contabilidade
 
@@ -23,7 +23,7 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     contabilidade = models.ForeignKey(Contabilidade, on_delete=models.CASCADE, null=True)
     
@@ -33,7 +33,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     profile_picture = models.ImageField(upload_to='profile_pictures', null=True)
 
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
     is_admin_contabilidade = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
 

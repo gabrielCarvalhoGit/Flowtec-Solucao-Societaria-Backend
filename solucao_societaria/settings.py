@@ -36,7 +36,7 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'apps.accounts.api.authentication.CustomJWTAuthentication',
+        'infra.authentication.custom_authentication.CustomJWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -82,7 +82,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'apps.accounts.api.middleware.TokenRefreshMiddleware',
+    'infra.middleware.token_middleware.TokenRefreshMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
 ]

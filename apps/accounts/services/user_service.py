@@ -23,9 +23,6 @@ class UserService(metaclass=ServiceBase):
     
     def create_user(self, **validated_data):
         contabilidade_id = validated_data.get('contabilidade_id')
-
-        if not contabilidade_id:
-            raise ValidationError({'contabilidade_id': ["Este campo é obrigatório."]})
         
         if self.repository.exists_by_email(validated_data['email']):
             raise ValidationError('Este e-mail já está em uso.')
@@ -41,7 +38,9 @@ class UserService(metaclass=ServiceBase):
     def update_user(self, user, **validated_data):
         return self.repository.update(user, **validated_data)
     
-    # def delete_user(self, user_id):
-    #     if not user_id:
-    #         raise ValidationError()
-    #     self.repository.delete(user)
+    def delete_user(self, user_id):
+        if not user_id:
+            raise ValidationError({'id': ['Parâmetro obrigatório.']})
+        
+        user = self.get_user(user_id)
+        self.repository.delete(user)

@@ -1,7 +1,8 @@
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-from rest_framework_simplejwt.exceptions import TokenError
-from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
+from django.utils.deprecation import MiddlewareMixin
+
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 
 class TokenRefreshMiddleware(MiddlewareMixin):

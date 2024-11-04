@@ -14,7 +14,7 @@ class CreateUserSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=100, required=True)
     email = serializers.EmailField(required=True)
 
-    contabilidade_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=False)
+    contabilidade_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=True)
     is_admin_contabilidade = serializers.BooleanField(default=False)
 
     def to_internal_value(self, data):

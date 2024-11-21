@@ -18,27 +18,27 @@ from apps.contabilidades.domain.entities.contabilidade_entity import Contabilida
 @dataclass(kw_only=True)
 class AberturaEmpresaEntity(EntityBase):
     contabilidade: ContabilidadeEntity
-    etapa: Optional[EtapaEntity]
+    etapa: Optional[EtapaEntity] = None
 
     nome: str
-    opcoes_nomes_empresa: Optional[List[str]]
-    nome_fantasia: Optional[str]
+    opcoes_nomes_empresa: Optional[List[str]] = None
+    nome_fantasia: Optional[str] = None
 
-    endereco: Optional[EnderecoEntity]
-    inscricao_imob: Optional[str]
+    endereco: Optional[EnderecoEntity] = None
+    inscricao_imob: Optional[str] = None
 
-    telefone: Optional[str]
-    email: Optional[str]
+    telefone: Optional[str] = None
+    email: Optional[str] = None
 
-    val_capital_social: Optional[Decimal]
-    capital_integralizado: Optional[bool]
-    data_integralizacao: Optional[date]
+    val_capital_social: Optional[Decimal] = None
+    capital_integralizado: Optional[bool] = None
+    data_integralizacao: Optional[date] = None
 
-    area_empresa: Optional[Decimal]
-    empresa_anexa_resid: Optional[bool]
-    endereco_apenas_contato: Optional[bool]
+    area_empresa: Optional[Decimal] = None
+    empresa_anexa_resid: Optional[bool] = None
+    endereco_apenas_contato: Optional[bool] = None
 
-    info_adic: Optional[InfoAdicEntity]
+    info_adic: Optional[InfoAdicEntity] = None
     expire_at: date
 
     @classmethod

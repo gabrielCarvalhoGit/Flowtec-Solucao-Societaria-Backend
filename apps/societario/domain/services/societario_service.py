@@ -41,10 +41,7 @@ class AberturaEmpresaService(metaclass=ServiceBase):
         contabilidade_id = validated_data.get('contabilidade_id', None)
 
         contabilidade = self.__contabilidade_service.get_contabilidade(contabilidade_id, request)
-        response = AberturaEmpresaEntity.new(
-            nome=nome,
-            contabilidade=contabilidade
-        )
+        response = AberturaEmpresaEntity.new(nome=nome, contabilidade=contabilidade)
         empresa = self.__repository.create(response)
 
         response.id = empresa.id

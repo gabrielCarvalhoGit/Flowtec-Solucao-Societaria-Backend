@@ -1,12 +1,9 @@
 import uuid
-from datetime import timedelta
 
 from django.db import models
-from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 
 from apps.contabilidades.models import Contabilidade
-from rest_framework.exceptions import ValidationError
 
 
 class Etapa(models.Model):
@@ -16,8 +13,8 @@ class Etapa(models.Model):
 class Endereco(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    endereco = models.CharField(max_length=255)
-    complemento = models.CharField(max_length=150)
+    endereco_completo = models.CharField(max_length=255)
+    complemento = models.CharField(max_length=80)
     cep = models.CharField(max_length=9)
 
 class InfoAdic(models.Model):
@@ -26,18 +23,18 @@ class InfoAdic(models.Model):
     resp_tecnica = models.BooleanField(default=False)
     nome_reponsavel = models.CharField(max_length=80, blank=True, null=True)
 
-    nmr_carteira_profissional = models.CharField(max_length=11)
-    uf = models.CharField(max_length=2)
+    nmr_carteira_profissional = models.CharField(max_length=11, blank=True, null=True)
+    uf = models.CharField(max_length=2, blank=True, null=True)
 
-    area_resp = models.CharField(max_length=50)
+    area_resp = models.CharField(max_length=50, blank=True, null=True)
 
 class AberturaEmpresa(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     contabilidade = models.ForeignKey(Contabilidade, on_delete=models.CASCADE)
-    etapa = models.ForeignKey(Etapa, on_delete=models.CASCADE)
+    etapa = models.ForeignKey(Etapa, on_delete=models.CASCADE, blank=True, null=True)
 
-    nome = models.CharField(max_length=100, unique=True)
-    opcoes_nomes_empresa = ArrayField(models.CharField(max_length=250), blank=True, null=True)
+    nome = models.CharField(max_length=100)
+    opcoes_nomes_empresa = ArrayField(models.CharField(max_length=100), blank=True, null=True)
     nome_fantasia = models.CharField(max_length=100, blank=True, null=True)
 
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, blank=True, null=True)
@@ -58,17 +55,7 @@ class AberturaEmpresa(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    expire_at = models.DateTimeField()
-    
-    def clean(self):
-        if self.opcoes_nomes_empresa and len(self.opcoes_nomes_empresa) > 3:
-            raise ValidationError('Você só pode adicionar até 3 nomes.')
-    
-    def save(self, *args, **kwargs):
-        if not self.expire_at:
-            self.expire_at = timezone.now() + timedelta(days=90)
-
-        super().save(*args, **kwargs)
+    expire_at = models.DateField()
 
 class Socios(models.Model):
     ESTADO_CIVIL_CHOICES = [
@@ -115,10 +102,13 @@ class Socios(models.Model):
     qtd_cotas = models.IntegerField()
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 class NomeProcesso(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nome_processo = models.CharField(max_length=80)
-        
+
 class Processo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 

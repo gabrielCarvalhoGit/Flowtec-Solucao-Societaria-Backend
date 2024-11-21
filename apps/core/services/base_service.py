@@ -16,6 +16,8 @@ def ServiceBaseDecorator(func):
             raise e
         except ValidationError as e:
             raise e
+        except ValueError as e:
+            raise APIException(str(e))
         except DatabaseError as e:
             raise APIException(f'Erro no banco de dados. {str(e)}') from e
         except Exception as e:

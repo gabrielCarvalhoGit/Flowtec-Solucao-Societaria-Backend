@@ -93,7 +93,7 @@ def get_user(request):
 
     return Response({'user': user_serializer.data}, status=status.HTTP_200_OK)
 
-@api_view(['POST', 'GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_user(request):
     serializer = CreateUserSerializer(data=request.data)

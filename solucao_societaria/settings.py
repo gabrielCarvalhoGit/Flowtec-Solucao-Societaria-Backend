@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -20,7 +21,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     'corsheaders',
 
     'rest_framework',
@@ -34,9 +34,13 @@ INSTALLED_APPS = [
     'apps.societario',
 ]
 
+MIGRATION_MODULES = {
+    "societario": "apps.societario.infra.migrations"
+}
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'infra.authentication.custom_authentication.CustomJWTAuthentication',
+        'apps.core.infra.authentication.custom_authentication.CustomJWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -45,7 +49,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
-    'EXCEPTION_HANDLER': 'infra.exception_handler.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'apps.core.infra.exception_handler.custom_exception_handler',
 }
 
 SIMPLE_JWT = {
@@ -82,7 +86,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'infra.middleware.token_middleware.TokenRefreshMiddleware',
+    'apps.core.infra.middleware.token_middleware.TokenRefreshMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
 ]
@@ -140,8 +144,6 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 
 USE_TZ = True
-
-STATIC_URL = 'static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

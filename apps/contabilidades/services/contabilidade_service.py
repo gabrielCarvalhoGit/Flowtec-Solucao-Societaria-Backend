@@ -16,7 +16,7 @@ class ContService:
             if request.user.contabilidade:
                 return request.user.contabilidade
             else:
-                raise NotFound('Nenhuma contabilidadade encontrada. Verifique se o usuário está vinculado a uma contabilidade ou informe o id da contabilidade que deseja consultar.')
+                raise ValidationError({'contabilidade_id': ['Este campo é obrigatório.']})
         
         try:
             contabilidade = self.repository.get_by_id(contabilidade_id)

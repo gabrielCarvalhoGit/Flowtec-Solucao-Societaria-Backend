@@ -3,8 +3,8 @@ from apps.societario.application.serializers.response.etapas_response import Eta
 
 
 class EtapasApplication:
-    def __init__(self, etapas_service = EtapasService()):
-        self.__service = etapas_service
+    def __init__(self, service = EtapasService()):
+        self.__service = service
     
     def get(self, request) -> EtapasResponseSerializer:
         id = request.query_params.get('id', None)

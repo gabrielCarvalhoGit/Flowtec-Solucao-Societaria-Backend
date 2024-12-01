@@ -40,7 +40,6 @@ class ProcessoService(metaclass=ServiceBase):
             etapa_atual=etapa,
             etapa_inicial=etapa
         )
-        ######################################################Verificar se expire_at esta sendo retornado################################################################
         processo = self.__repository.create(response)
 
         response.id = processo.id

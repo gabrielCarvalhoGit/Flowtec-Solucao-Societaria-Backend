@@ -1,4 +1,5 @@
 import uuid
+from typing import List
 from rest_framework.exceptions import ValidationError, NotFound
 
 from apps.core.services.base_service import ServiceBase
@@ -14,7 +15,7 @@ class TipoProcessoService(metaclass=ServiceBase):
 
         self.__repository = tipo_processo_repository
     
-    def get_tipo_processo(self, id: uuid) -> TipoProcessoEntity:
+    def get_tipo_processo(self, id: uuid.UUID) -> TipoProcessoEntity:
         if not id:
             raise ValidationError({'id': 'Parâmetro obrigatório.'})
         
@@ -23,3 +24,7 @@ class TipoProcessoService(metaclass=ServiceBase):
             raise NotFound('Tipo do processo não encontrado.')
         
         return TipoProcessoEntity.from_model(tipo_processo)
+    
+    def list_tipo_processo(self) -> List[TipoProcessoEntity]:
+        tipos_processo = self.__repository.list_tipo_processo()
+        return [TipoProcessoEntity.from_model(tipo_processo) for tipo_processo in tipos_processo]

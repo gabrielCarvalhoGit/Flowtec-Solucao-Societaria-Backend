@@ -14,12 +14,10 @@ def get_etapa(request):
     response = application.get(request)
     return Response({'etapa': response.data}, status=status.HTTP_200_OK)
 
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def get_list_etapas(request):
-#     service = EtapaProcessoService()
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_list_etapas(request):
+    application = EtapasApplication()
 
-#     etapas = service.get_list_etapas()
-#     serializer = EtapaSerializer(etapas, many=True)
-
-#     return Response({'etapas': serializer.data}, status=status.HTTP_200_OK)
+    response = application.list_etapas()
+    return Response({'etapas': response.data}, status=status.HTTP_200_OK)

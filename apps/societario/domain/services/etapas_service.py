@@ -1,4 +1,5 @@
 import uuid
+from typing import List
 from rest_framework.exceptions import ValidationError, NotFound
 
 from apps.core.services.base_service import ServiceBase
@@ -14,7 +15,7 @@ class EtapasService(metaclass=ServiceBase):
         
         self.__repository = etapa_repository
     
-    def get_etapa(self, id: uuid) -> EtapasEntity:
+    def get_etapa(self, id: uuid.UUID) -> EtapasEntity:
         if not id:
             raise ValidationError({'id': ['Parâmetro obrigatório.']})
         
@@ -23,3 +24,7 @@ class EtapasService(metaclass=ServiceBase):
             raise NotFound('Etapa não encontrada.')
         
         return EtapasEntity.from_model(etapa)
+    
+    def list_etapas(self) -> List[EtapasEntity]:
+        etapas = self.__repository.list_etapas()
+        return [EtapasEntity.from_model(etapa) for etapa in etapas]

@@ -13,3 +13,9 @@ class EtapasApplication:
         response = EtapasResponseSerializer(etapa)
 
         return response
+    
+    def list_etapas(self) -> EtapasResponseSerializer:
+        etapas = self.__service.list_etapas()
+        response = EtapasResponseSerializer(etapas, many=True)
+
+        return response

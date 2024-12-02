@@ -1,6 +1,6 @@
-from dataclasses import dataclass
 from django.utils import timezone
 from datetime import date, timedelta
+from dataclasses import dataclass, field
 
 from apps.core.domain.entities.base_entity import EntityBase
 from apps.societario.domain.entities.etapas_entity import EtapasEntity
@@ -18,8 +18,8 @@ class ProcessoEntity(EntityBase):
     etapa_atual: EtapasEntity
     etapa_inicial: EtapasEntity
 
-    expire_at: date
+    expire_at: date = field(default=None)
 
     def __post_init__(self):
-        if not self.expire_at:
+        if self.expire_at is None:
             self.expire_at = timezone.localdate() + timedelta(days=90)

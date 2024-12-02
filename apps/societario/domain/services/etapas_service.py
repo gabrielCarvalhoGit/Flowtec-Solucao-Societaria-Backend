@@ -17,7 +17,7 @@ class EtapasService(metaclass=ServiceBase):
     
     def get_etapa(self, id: uuid.UUID) -> EtapasEntity:
         if not id:
-            raise ValidationError({'id': ['Parâmetro obrigatório.']})
+            raise ValidationError({'etapa_id': ['Parâmetro obrigatório.']})
         
         etapa = self.__repository.get_by_id(id)
         if not etapa:

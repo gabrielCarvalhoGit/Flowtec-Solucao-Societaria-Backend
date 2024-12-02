@@ -17,7 +17,7 @@ class TipoProcessoService(metaclass=ServiceBase):
     
     def get_tipo_processo(self, id: uuid.UUID) -> TipoProcessoEntity:
         if not id:
-            raise ValidationError({'id': 'Parâmetro obrigatório.'})
+            raise ValidationError({'tipo_processo_id': 'Parâmetro obrigatório.'})
         
         tipo_processo = self.__repository.get_by_id(id)
         if not tipo_processo:

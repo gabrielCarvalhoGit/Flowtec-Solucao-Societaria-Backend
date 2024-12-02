@@ -7,7 +7,7 @@ class TipoProcessoApplication:
         self.__service = service
     
     def get(self, request) -> TipoProcessoResponseSerializer:
-        id = request.query_params.get('id', None)
+        id = request.query_params.get('tipo_processo_id', None)
 
         tipo_processo = self.__service.get_tipo_processo(id)
         response = TipoProcessoResponseSerializer(tipo_processo)

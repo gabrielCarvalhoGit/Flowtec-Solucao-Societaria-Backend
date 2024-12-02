@@ -22,12 +22,12 @@ class ProcessoService(metaclass=ServiceBase):
         self.__etapa_service = etapa_service
         self.__tipo_processo_service = tipo_processo_service
         
-    def create_process(self, request, **data):
+    def create_processo(self, request, **data) -> ProcessoEntity:
         nome = data.get('nome')
 
         contabilidade_id = data.get('contabilidade_id')
         tipo_processo_id = data.get('tipo_processo_id')
-        etapa_id = data.get('etapa_atual_id')
+        etapa_id = data.get('etapa_id')
 
         contabilidade = self.__contabilidade_service.get_contabilidade(contabilidade_id, request)
         tipo_processo = self.__tipo_processo_service.get_tipo_processo(tipo_processo_id)

@@ -7,7 +7,7 @@ class EtapasApplication:
         self.__service = service
     
     def get(self, request) -> EtapasResponseSerializer:
-        id = request.query_params.get('id', None)
+        id = request.query_params.get('etapa_id', None)
 
         etapa = self.__service.get_etapa(id)
         response = EtapasResponseSerializer(etapa)

@@ -3,7 +3,7 @@ from typing import List
 from rest_framework.exceptions import ValidationError, NotFound
 
 from apps.core.services.base_service import ServiceBase
-from apps.societario.domain.entities.etapas_entity import EtapasEntity
+from apps.societario.domain.entities.etapas import EtapasEntity
 from apps.societario.infra.repositories.etapas_repository import EtapasRepository
 
 

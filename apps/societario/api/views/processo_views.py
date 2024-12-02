@@ -13,3 +13,19 @@ def create_processo(request):
     
     response = application.create(request)
     return Response({'processo': response.data}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_processo(request):
+    application = ProcessosApplication()
+
+    response = application.get(request)
+    return Response({'processo': response.data}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_processos_etapas(request):
+    application = ProcessosApplication()
+
+    response = application.get_processos_etapas()
+    return Response({'processos_por_etapa': response.data}, status=status.HTTP_200_OK)

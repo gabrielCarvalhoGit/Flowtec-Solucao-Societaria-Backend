@@ -1,7 +1,11 @@
+import uuid
+from typing import List
+from rest_framework.exceptions import ValidationError, NotFound
+
 from apps.core.services.base_service import ServiceBase
 from apps.contabilidades.services.contabilidade_service import ContService
 
-from apps.societario.domain.entities.processo_entity import ProcessoEntity
+from apps.societario.domain.entities.processo import ProcessoEntity
 from apps.societario.infra.repositories.processo_repository import ProcessoRepository
 
 from apps.societario.domain.services.etapas_service import EtapasService
@@ -45,4 +49,35 @@ class ProcessoService(metaclass=ServiceBase):
         response.id = processo.id
         response.created_at = processo.created_at
 
+        return response
+    
+    def get_processo(self, id: uuid.UUID) -> ProcessoEntity:
+        if not id:
+            raise ValidationError({'processo_id': ['Parâmetro obrigatório.']})
+        
+        processo = self.__repository.get_by_id(id)
+        if not processo:
+            raise NotFound('Processo não encontrado.')
+        
+        return ProcessoEntity.from_model(processo)
+
+    def list_processos_etapas(self) -> List[dict]:
+        response = []
+        etapas = self.__etapa_service.list_etapas()
+
+        for etapa in etapas:
+            processos = self.__repository.get_by_etapa(etapa)
+            processos_entities = [ProcessoEntity.from_model(processo) for processo in processos]
+
+            etapa_data = {
+                "id": etapa.id,
+                "nome": etapa.nome,
+                "ordem": etapa.ordem,
+            }
+
+            if processos_entities:
+                etapa_data['processos'] = processos_entities
+            
+            response.append(etapa_data)
+        
         return response

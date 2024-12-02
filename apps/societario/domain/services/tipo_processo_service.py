@@ -3,7 +3,7 @@ from typing import List
 from rest_framework.exceptions import ValidationError, NotFound
 
 from apps.core.services.base_service import ServiceBase
-from apps.societario.domain.entities.tipo_processo_entity import TipoProcessoEntity
+from apps.societario.domain.entities.tipo_processo import TipoProcessoEntity
 from apps.societario.infra.repositories.tipo_processo_repository import TipoProcessoRepository
 
 

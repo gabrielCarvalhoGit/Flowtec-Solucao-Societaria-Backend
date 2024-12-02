@@ -3,8 +3,8 @@ from datetime import date, timedelta
 from dataclasses import dataclass, field
 
 from apps.core.domain.entities.base_entity import EntityBase
-from apps.societario.domain.entities.etapas_entity import EtapasEntity
-from apps.societario.domain.entities.tipo_processo_entity import TipoProcessoEntity
+from apps.societario.domain.entities.etapas import EtapasEntity
+from apps.societario.domain.entities.tipo_processo import TipoProcessoEntity
 
 from apps.contabilidades.domain.entities.contabilidade_entity import ContabilidadeEntity
 
@@ -23,3 +23,8 @@ class ProcessoEntity(EntityBase):
     def __post_init__(self):
         if self.expire_at is None:
             self.expire_at = timezone.localdate() + timedelta(days=90)
+    
+    @classmethod
+    def from_model(cls, model_instance) -> "ProcessoEntity":
+        model_data = {field.name: getattr(model_instance, field.name) for field in model_instance._meta.fields}
+        return cls(**model_data)

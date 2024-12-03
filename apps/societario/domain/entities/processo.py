@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from dataclasses import dataclass, field
 
 from apps.core.domain.entities.base_entity import EntityBase
-from apps.societario.domain.entities.etapas import EtapasEntity
+from apps.societario.domain.entities.etapa import EtapaEntity
 from apps.societario.domain.entities.tipo_processo import TipoProcessoEntity
 
 from apps.contabilidades.domain.entities.contabilidade_entity import ContabilidadeEntity
@@ -15,8 +15,8 @@ class ProcessoEntity(EntityBase):
     nome: str
 
     tipo_processo: TipoProcessoEntity
-    etapa_atual: EtapasEntity
-    etapa_inicial: EtapasEntity
+    etapa_atual: EtapaEntity
+    etapa_inicial: EtapaEntity
 
     expire_at: date = field(default=None)
 

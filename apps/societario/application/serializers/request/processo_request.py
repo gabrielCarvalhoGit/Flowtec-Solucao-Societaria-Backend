@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 
-class ProcessosRequestSerializer(serializers.Serializer):
+class ProcessoRequestSerializer(serializers.Serializer):
     nome = serializers.CharField(max_length=100, required=True)
 
     contabilidade_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=False)

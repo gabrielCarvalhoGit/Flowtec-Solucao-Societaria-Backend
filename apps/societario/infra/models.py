@@ -125,7 +125,7 @@ from apps.contabilidades.models import Contabilidade
 #     nome_processo = models.ForeignKey(NomeProcesso, on_delete=models.CASCADE)
 
 
-class Etapas(models.Model):
+class Etapa(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     nome = models.CharField(max_length=20)
@@ -135,15 +135,15 @@ class TipoProcesso(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     descricao = models.CharField(max_length=37)
 
-class Processos(models.Model):
+class Processo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     contabilidade = models.ForeignKey(Contabilidade, on_delete=models.CASCADE)
     nome = models.CharField(max_length=80)
 
     tipo_processo = models.ForeignKey(TipoProcesso, on_delete=models.PROTECT)
-    etapa_atual = models.ForeignKey(Etapas, on_delete=models.PROTECT, related_name='etapa_atual')
-    etapa_inicial = models.ForeignKey(Etapas, on_delete=models.PROTECT, related_name='etapa_inicial')
+    etapa_atual = models.ForeignKey(Etapa, on_delete=models.PROTECT, related_name='etapa_atual')
+    etapa_inicial = models.ForeignKey(Etapa, on_delete=models.PROTECT, related_name='etapa_inicial')
     
     expire_at = models.DateField()
 

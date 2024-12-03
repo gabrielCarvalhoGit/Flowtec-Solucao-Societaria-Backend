@@ -1,16 +1,16 @@
 from rest_framework.exceptions import ValidationError
 
 from apps.societario.domain.services.processo_service import ProcessoService
-from apps.societario.application.serializers.request.processo_request import ProcessosRequestSerializer
-from apps.societario.application.serializers.response.processo_response import ProcessoResponseSerializer, ProcessosEtapaResponseSerializer
+from apps.societario.application.serializers.request.processo_request import ProcessoRequestSerializer
+from apps.societario.application.serializers.response.processo_response import ProcessoResponseSerializer, ProcessoEtapaResponseSerializer
 
 
-class ProcessosApplication:
+class ProcessoApplication:
     def __init__(self, service=ProcessoService()):
         self.__service = service
     
     def create(self, request) -> ProcessoResponseSerializer:
-        serializer_request = ProcessosRequestSerializer(data=request.data)
+        serializer_request = ProcessoRequestSerializer(data=request.data)
 
         if serializer_request.is_valid():
             processo = self.__service.create_processo(request, **serializer_request.validated_data)
@@ -28,8 +28,8 @@ class ProcessosApplication:
 
         return response
     
-    def get_processos_etapas(self) -> ProcessosEtapaResponseSerializer:
+    def get_processos_etapas(self) -> ProcessoEtapaResponseSerializer:
         processos_etapas = self.__service.list_processos_etapas()
         
-        response = ProcessosEtapaResponseSerializer(processos_etapas, many=True)
+        response = ProcessoEtapaResponseSerializer(processos_etapas, many=True)
         return response

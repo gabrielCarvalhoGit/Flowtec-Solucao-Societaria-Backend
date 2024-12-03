@@ -8,7 +8,7 @@ from apps.contabilidades.services.contabilidade_service import ContService
 from apps.societario.domain.entities.processo import ProcessoEntity
 from apps.societario.infra.repositories.processo_repository import ProcessoRepository
 
-from apps.societario.domain.services.etapas_service import EtapasService
+from apps.societario.domain.services.etapa_service import EtapaService
 from apps.societario.domain.services.tipo_processo_service import TipoProcessoService
 
 
@@ -17,7 +17,7 @@ class ProcessoService(metaclass=ServiceBase):
             self,
             processo_repository = ProcessoRepository(),
             cont_service = ContService(),
-            etapa_service = EtapasService(),
+            etapa_service = EtapaService(),
             tipo_processo_service = TipoProcessoService()
         ):
 

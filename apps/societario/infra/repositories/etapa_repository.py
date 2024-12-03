@@ -1,18 +1,18 @@
 import uuid
 from typing import Optional, List
 
-from apps.societario.infra.models import Etapas
+from apps.societario.infra.models import Etapa
 
 
-class EtapasRepository:
-    def __init__(self, model=Etapas):
+class EtapaRepository:
+    def __init__(self, model=Etapa):
         self.__model = model
     
-    def get_by_id(self, id: uuid.UUID) -> Optional[Etapas]:
+    def get_by_id(self, id: uuid.UUID) -> Optional[Etapa]:
         try:
             return self.__model.objects.get(id=id)
         except self.__model.DoesNotExist:
             return None
     
-    def list_etapas(self) -> List[Etapas]:
+    def list_etapas(self) -> List[Etapa]:
         return self.__model.objects.all().order_by('ordem')

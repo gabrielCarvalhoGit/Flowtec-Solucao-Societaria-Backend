@@ -15,8 +15,7 @@ class ProcessoRepository:
             contabilidade=data.contabilidade,
             nome=data.nome,
             tipo_processo_id = data.tipo_processo.id,
-            etapa_atual_id = data.etapa_atual.id,
-            etapa_inicial_id = data.etapa_inicial.id,
+            etapa_id = data.etapa.id,
             expire_at = data.expire_at
         )
     
@@ -27,4 +26,4 @@ class ProcessoRepository:
             return None
     
     def get_by_etapa(self, etapa: EtapaEntity) -> List[Processo]:
-        return self.__model.objects.filter(etapa_atual_id=etapa.id)
+        return self.__model.objects.filter(etapa_id=etapa.id)

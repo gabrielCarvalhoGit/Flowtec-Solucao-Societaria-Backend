@@ -15,8 +15,7 @@ class ProcessoEntity(EntityBase):
     nome: str
 
     tipo_processo: TipoProcessoEntity
-    etapa_atual: EtapaEntity
-    etapa_inicial: EtapaEntity
+    etapa: EtapaEntity
 
     expire_at: date = field(default=None)
 

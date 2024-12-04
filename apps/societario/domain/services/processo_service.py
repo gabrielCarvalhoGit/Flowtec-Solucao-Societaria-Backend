@@ -41,8 +41,7 @@ class ProcessoService(metaclass=ServiceBase):
             contabilidade=contabilidade,
             nome=nome,
             tipo_processo=tipo_processo,
-            etapa_atual=etapa,
-            etapa_inicial=etapa
+            etapa=etapa
         )
         processo = self.__repository.create(response)
 

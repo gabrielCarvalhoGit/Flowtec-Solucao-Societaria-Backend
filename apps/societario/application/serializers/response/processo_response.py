@@ -10,12 +10,11 @@ from .tipo_processo_response import TipoProcessoResponseSerializer
 class ProcessoResponseSerializer(serializers.ModelSerializer):
     contabilidade = ContabilidadeProcessoResponseSerializer()
     tipo_processo = TipoProcessoResponseSerializer()
-    etapa_atual = EtapaResponseSerializer(required=False)
-    etapa_inicial = EtapaResponseSerializer(required=False)
+    etapa = EtapaResponseSerializer(required=False)
     
     class Meta:
         model = Processo
-        fields = ['id', 'nome', 'contabilidade', 'tipo_processo', 'etapa_atual', 'etapa_inicial', 'expire_at', 'created_at']
+        fields = ['id', 'nome', 'contabilidade', 'tipo_processo', 'etapa', 'expire_at', 'created_at']
 
 class ProcessoEtapaResponseSerializer(serializers.ModelSerializer):
     processos = ProcessoResponseSerializer(many=True, required=False)

@@ -6,6 +6,7 @@ from apps.core.services.base_service import ServiceBase
 from apps.contabilidades.services.contabilidade_service import ContService
 
 from apps.societario.domain.entities.processo import ProcessoEntity
+from apps.societario.infra.repositories.etapa_repository import EtapaRepository
 from apps.societario.infra.repositories.processo_repository import ProcessoRepository
 
 from apps.societario.domain.services.etapa_service import EtapaService
@@ -15,13 +16,15 @@ from apps.societario.domain.services.tipo_processo_service import TipoProcessoSe
 class ProcessoService(metaclass=ServiceBase):
     def __init__(
             self,
-            processo_repository = ProcessoRepository(),
+            repository = ProcessoRepository(),
+            etapa_repository = EtapaRepository(),
             cont_service = ContService(),
             etapa_service = EtapaService(),
             tipo_processo_service = TipoProcessoService()
         ):
 
-        self.__repository = processo_repository
+        self.__repository = repository
+        self.__etapa_repository = etapa_repository
         self.__contabilidade_service = cont_service
         self.__etapa_service = etapa_service
         self.__tipo_processo_service = tipo_processo_service
@@ -62,10 +65,10 @@ class ProcessoService(metaclass=ServiceBase):
 
     def list_processos_etapas(self) -> List[dict]:
         response = []
-        etapas = self.__etapa_service.list_etapas()
+        etapas = self.__etapa_repository.list_processos_by_etapa()
 
         for etapa in etapas:
-            processos = self.__repository.get_by_etapa(etapa)
+            processos = etapa.processos.all()
             processos_entities = [ProcessoEntity.from_model(processo) for processo in processos]
 
             etapa_data = {

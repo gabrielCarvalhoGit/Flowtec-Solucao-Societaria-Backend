@@ -10,10 +10,10 @@ from apps.societario.infra.repositories.etapa_repository import EtapaRepository
 class EtapaService(metaclass=ServiceBase):
     def __init__(
             self,
-            etapa_repository = EtapaRepository()
+            repository = EtapaRepository()
         ):
         
-        self.__repository = etapa_repository
+        self.__repository = repository
     
     def get_etapa(self, id: uuid.UUID) -> EtapaEntity:
         if not id:

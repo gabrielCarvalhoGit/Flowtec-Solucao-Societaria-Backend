@@ -10,10 +10,10 @@ from apps.societario.infra.repositories.tipo_processo_repository import TipoProc
 class TipoProcessoService(metaclass=ServiceBase):
     def __init__(
             self,
-            tipo_processo_repository = TipoProcessoRepository()
+            repository = TipoProcessoRepository()
         ):
 
-        self.__repository = tipo_processo_repository
+        self.__repository = repository
     
     def get_tipo_processo(self, id: uuid.UUID) -> TipoProcessoEntity:
         if not id:

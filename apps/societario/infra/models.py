@@ -142,7 +142,7 @@ class Processo(models.Model):
     nome = models.CharField(max_length=80)
 
     tipo_processo = models.ForeignKey(TipoProcesso, on_delete=models.PROTECT)
-    etapa = models.ForeignKey(Etapa, on_delete=models.PROTECT, related_name='etapa_atual')
+    etapa = models.ForeignKey(Etapa, on_delete=models.PROTECT, related_name='processos')
     
     expire_at = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -151,6 +151,17 @@ class Tarefa(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     descricao = models.CharField(max_length=80)
-    etapa = models.ForeignKey(Etapa, on_delete=models.PROTECT, related_name='etapa')
+    etapa = models.ForeignKey(Etapa, on_delete=models.PROTECT, related_name='tarefas')
     ordem = models.IntegerField()
     obrigatoria = models.BooleanField(default=True)
+
+class StausTarefa(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    processo = models.ForeignKey(Processo, on_delete=models.PROTECT, related_name='stats_tarefa')
+    etapa = models.ForeignKey(Etapa, on_delete=models.PROTECT, related_name='etapa')
+    tarefa = models.ForeignKey(Tarefa, on_delete=models.PROTECT, related_name='status_tarefas')
+    concluida = models.BooleanField(default=False)
+    sequencia = models.IntegerField()
+
+    updated_at = models.DateTimeField(auto_now=True)

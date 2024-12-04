@@ -16,3 +16,6 @@ class EtapaRepository:
     
     def list_etapas(self) -> List[Etapa]:
         return self.__model.objects.all().order_by('ordem')
+    
+    def list_processos_by_etapa(self):
+        return self.__model.objects.prefetch_related('processos')

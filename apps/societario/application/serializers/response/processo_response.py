@@ -29,4 +29,8 @@ class ProcessoEtapaResponseSerializer(serializers.ModelSerializer):
         if not representation.get('processos'):
             representation['processos'] = []
         
+        for processo in representation['processos']:
+            if 'etapa' in processo:
+                del processo['etapa']
+        
         return representation

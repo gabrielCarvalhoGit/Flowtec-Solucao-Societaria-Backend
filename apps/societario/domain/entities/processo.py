@@ -13,10 +13,8 @@ from apps.contabilidades.domain.entities.contabilidade_entity import Contabilida
 class ProcessoEntity(EntityBase):
     contabilidade: ContabilidadeEntity
     nome: str
-
     tipo_processo: TipoProcessoEntity
     etapa: EtapaEntity
-
     expire_at: date = field(default=None)
 
     def __post_init__(self):

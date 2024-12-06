@@ -8,9 +8,9 @@ class EtapaRepository:
     def __init__(self, model=Etapa):
         self.__model = model
     
-    def get_by_id(self, id: uuid.UUID) -> Optional[Etapa]:
+    def get_by_id(self, etapa_id: uuid.UUID) -> Optional[Etapa]:
         try:
-            return self.__model.objects.get(id=id)
+            return self.__model.objects.get(id=etapa_id)
         except self.__model.DoesNotExist:
             return None
     

@@ -20,7 +20,7 @@ class ProcessoApplication:
 
         raise ValidationError(serializer_request.errors)
     
-    def get(self, request) -> ProcessoResponseSerializer:
+    def get(self, request):
         id = request.query_params.get('processo_id', None)
 
         processo = self.__service.get_processo(id)

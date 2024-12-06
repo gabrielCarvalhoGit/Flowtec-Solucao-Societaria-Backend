@@ -5,16 +5,18 @@ from apps.contabilidades.application.serializers.response.contabilidade_response
 
 from .etapa_response import EtapaResponseSerializer
 from .tipo_processo_response import TipoProcessoResponseSerializer
+from .status_tarefa_response import StatusTarefaResponseSerializer
 
 
 class ProcessoResponseSerializer(serializers.ModelSerializer):
     contabilidade = ContabilidadeProcessoResponseSerializer()
     tipo_processo = TipoProcessoResponseSerializer()
     etapa = EtapaResponseSerializer(required=False)
+    tarefas = StatusTarefaResponseSerializer(required=False, many=True)
     
     class Meta:
         model = Processo
-        fields = ['id', 'nome', 'contabilidade', 'tipo_processo', 'etapa', 'expire_at', 'created_at']
+        fields = ['id', 'nome', 'contabilidade', 'tipo_processo', 'etapa', 'tarefas', 'created_at', 'expire_at']
 
 class ProcessoEtapaResponseSerializer(serializers.ModelSerializer):
     processos = ProcessoResponseSerializer(many=True, required=False)

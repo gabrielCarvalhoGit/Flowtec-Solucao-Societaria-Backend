@@ -1,10 +1,10 @@
-import uuid
 from typing import List
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import NotFound
 
 from apps.core.services.base_service import ServiceBase
 
-from apps.societario.domain.entities.tarefa_entity import TarefaEntity
+from apps.societario.domain.entities.etapa import EtapaEntity
+from apps.societario.domain.entities.tarefa import TarefaEntity
 from apps.societario.infra.repositories.tarefa_repository import TarefaRepository
 
 
@@ -16,10 +16,10 @@ class TarefaService(metaclass=ServiceBase):
         
         self.__repository = repository
     
-    def list_tarefas_etapa(self, etapa_id: uuid.UUID) -> List[TarefaEntity]:
-        tarefas = self.__repository.list_tarefas_by_etapa(etapa_id)
+    def filter_tarefas_etapa(self, etapa: EtapaEntity) -> List[TarefaEntity]:
+        tarefas = self.__repository.filter_tarefas(etapa.id)
 
         if not tarefas:
-            raise ValidationError('Nenhuma tarefa encontrada para a etapa informada.')
+            raise NotFound('Nenhuma tarefa encontrada para a etapa informada.')
         
         return [TarefaEntity.from_model(tarefa) for tarefa in tarefas]

@@ -18,3 +18,8 @@ class ContabilidadeEntity(EntityBase):
     desc_atividade_principal: str
     endereco: str
     cep: str
+
+    @classmethod
+    def from_model(cls, model_instance) -> "ContabilidadeEntity":
+        model_data = {field.name: getattr(model_instance, field.name) for field in model_instance._meta.fields}
+        return cls(**model_data)

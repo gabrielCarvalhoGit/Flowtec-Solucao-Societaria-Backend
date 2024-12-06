@@ -39,6 +39,27 @@ class ProcessoService(metaclass=ServiceBase):
         self.__status_tarefa_service = status_tarefa_service
     
     @transaction.atomic
+    def get_processo(self, id: uuid.UUID) -> ProcessoDetalhadoEntity:
+        if not id:
+            raise ValidationError({'processo_id': ['Parâmetro obrigatório.']})
+        
+        processo = self.__repository.get_by_id(id)
+        if not processo:
+            raise NotFound('Processo não encontrado.')
+        
+        status_tarefas = self.__status_tarefa_service.filter_status_tarefas_processo(processo)
+        return ProcessoDetalhadoEntity(
+            id=processo.id,
+            contabilidade=ContabilidadeEntity.from_model(processo.contabilidade),
+            nome=processo.nome,
+            tipo_processo=TipoProcessoEntity.from_model(processo.tipo_processo),
+            etapa=EtapaEntity.from_model(processo.etapa),
+            tarefas=status_tarefas,
+            created_at=processo.created_at,
+            expire_at=processo.expire_at
+        )
+
+    @transaction.atomic
     def create_processo(self, request, **data) -> ProcessoEntity:
         nome = data.get('nome')
 
@@ -64,26 +85,23 @@ class ProcessoService(metaclass=ServiceBase):
         self.__status_tarefa_service.create_tarefas(response, etapa)
         return response
 
-    @transaction.atomic
-    def get_processo(self, id: uuid.UUID) -> ProcessoDetalhadoEntity:
-        if not id:
-            raise ValidationError({'processo_id': ['Parâmetro obrigatório.']})
+    def update_processo(self, **data):
+        processo_id = data.get('processo_id')
+        processo = self.__repository.get_by_id(processo_id)
+
+        tarefas = data.get('tarefas')
+        for tarefa in tarefas:
+            tarefa = self.__status_tarefa_service.get_tarefa(tarefa['tarefa_id'])
+            tarefa.concluida = True
+
+            self.__status_tarefa_service.update(tarefa)
         
-        processo = self.__repository.get_by_id(id)
-        if not processo:
-            raise NotFound('Processo não encontrado.')
-        
-        status_tarefas = self.__status_tarefa_service.filter_status_tarefas_processo(processo.id)
-        return ProcessoDetalhadoEntity(
-            id=processo.id,
-            contabilidade=ContabilidadeEntity.from_model(processo.contabilidade),
-            nome=processo.nome,
-            tipo_processo=TipoProcessoEntity.from_model(processo.tipo_processo),
-            etapa=EtapaEntity.from_model(processo.etapa),
-            tarefas=status_tarefas,
-            created_at=processo.created_at,
-            expire_at=processo.expire_at
-        )
+        pendentes = self.__status_tarefa_service.filter_tarefas_pendente(processo, processo.etapa)
+        if not pendentes:
+            nova_etapa = self.__etapa_repository.get_by_ordem(processo.etapa.ordem + 1)
+            processo.etapa = nova_etapa
+
+            self.__repository.update(processo)
 
     def list_processos_etapas(self) -> List[dict]:
         response = []

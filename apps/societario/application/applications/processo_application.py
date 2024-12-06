@@ -2,6 +2,7 @@ from rest_framework.exceptions import ValidationError
 
 from apps.societario.domain.services.processo_service import ProcessoService
 from apps.societario.application.serializers.request.processo_request import ProcessoRequestSerializer
+from apps.societario.application.serializers.request.status_tarefa_request import StatusTarefaRequestSerializer
 from apps.societario.application.serializers.response.processo_response import ProcessoResponseSerializer, ProcessoEtapaResponseSerializer
 
 
@@ -27,6 +28,15 @@ class ProcessoApplication:
         response = ProcessoResponseSerializer(processo)
 
         return response
+    
+    def update(self, request):
+        serializer_request = StatusTarefaRequestSerializer(data=request.data)
+
+        if serializer_request.is_valid():
+            self.__service.update_processo(**serializer_request.validated_data)
+            return 'ok'
+        
+        raise ValidationError(serializer_request.errors)
     
     def get_processos_etapas(self) -> ProcessoEtapaResponseSerializer:
         processos_etapas = self.__service.list_processos_etapas()

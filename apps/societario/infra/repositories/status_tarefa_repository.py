@@ -21,8 +21,24 @@ class StatusTarefaRepository:
         ]
         return StatusTarefa.objects.bulk_create(status_tarefa_models)
     
+    def update(self, data: StatusTarefaEntity):
+        self.__model.objects.filter(id=data.id).update(concluida=data.concluida)
+    
+    def get_by_id(self, id):
+        try:
+            return self.__model.objects.get(id=id)
+        except self.__model.DoesNotExist:
+            return None
+    
+    def filter_tarefas_pendentes(self, processo, etapa):
+        return self.__model.objects.filter(
+            processo_id=processo.id,
+            etapa_id=etapa.id,
+            concluida=False
+        )
+    
     def filter_status_tarefas(self, processo_id: uuid.UUID) -> List[StatusTarefa]:
-        return StatusTarefa.objects.filter(processo_id=processo_id).select_related(
+        return self.__model.objects.filter(processo_id=processo_id).select_related(
             'tarefa', 
             'etapa'
         ).order_by('sequencia')

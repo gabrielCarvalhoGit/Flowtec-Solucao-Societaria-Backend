@@ -14,6 +14,9 @@ class EtapaRepository:
         except self.__model.DoesNotExist:
             return None
     
+    def get_by_ordem(self, ordem):
+        return self.__model.objects.get(ordem=ordem)
+    
     def list_etapas(self) -> List[Etapa]:
         return self.__model.objects.all().order_by('ordem')
     

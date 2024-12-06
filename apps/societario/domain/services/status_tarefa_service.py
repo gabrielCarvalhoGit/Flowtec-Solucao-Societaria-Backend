@@ -35,8 +35,21 @@ class StatusTarefaService(metaclass=ServiceBase):
         ]
         return self.__repository.bulk_create(status_tarefas)
     
-    def filter_status_tarefas_processo(self, processo_id: uuid.UUID) -> List[StatusTarefaEntity]:
-        status_tarefas = self.__repository.filter_status_tarefas(processo_id)
+    def update(self, status_tarefa: StatusTarefaEntity):
+        self.__repository.update(status_tarefa)
+    
+    def get_tarefa(self, id: uuid.UUID):
+        tarefa = self.__repository.get_by_id(id)
+        if not tarefa:
+            raise NotFound('Tarefa não encontrada.')
+        
+        return StatusTarefaEntity.from_model(tarefa)
+    
+    def filter_tarefas_pendente(self, processo, etapa):
+        return self.__repository.filter_tarefas_pendentes(processo, etapa)
+    
+    def filter_status_tarefas_processo(self, processo: ProcessoEntity) -> List[StatusTarefaEntity]:
+        status_tarefas = self.__repository.filter_status_tarefas(processo.id)
 
         if not status_tarefas:
             raise NotFound('Nenhuma tarefa encontrada para o processo informado.')

@@ -14,6 +14,14 @@ def create_processo(request):
     response = application.create(request)
     return Response({'processo': response.data}, status=status.HTTP_200_OK)
 
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_processo(request):
+    application = ProcessoApplication()
+
+    response = application.update(request)
+    return Response({'processo': response}, status=status.HTTP_200_OK)
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_processo(request):

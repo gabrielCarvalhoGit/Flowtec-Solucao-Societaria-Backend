@@ -20,6 +20,9 @@ class ProcessoRepository:
         
         return processo
     
+    def update(self, data: ProcessoEntity):
+        return self.__model.objects.filter(id=data.id).update(etapa_id=data.etapa.id)
+    
     def get_by_id(self, processo_id: uuid.UUID) -> Optional[Processo]:
         try:
             return self.__model.objects.select_related(

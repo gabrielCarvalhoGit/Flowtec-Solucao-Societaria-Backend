@@ -102,6 +102,7 @@ class ProcessoService(metaclass=ServiceBase):
             processo.etapa = nova_etapa
 
             self.__repository.update(processo)
+            self.__status_tarefa_service.create_tarefas(processo, nova_etapa)
 
     def list_processos_etapas(self) -> List[dict]:
         response = []

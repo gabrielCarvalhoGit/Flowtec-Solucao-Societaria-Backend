@@ -85,25 +85,6 @@ class ProcessoService(metaclass=ServiceBase):
         self.__status_tarefa_service.create_tarefas(response, etapa)
         return response
 
-    def update_processo(self, **data):
-        processo_id = data.get('processo_id')
-        processo = self.__repository.get_by_id(processo_id)
-
-        tarefas = data.get('tarefas')
-        for tarefa in tarefas:
-            tarefa = self.__status_tarefa_service.get_tarefa(tarefa['tarefa_id'])
-            tarefa.concluida = True
-
-            self.__status_tarefa_service.update(tarefa)
-        
-        pendentes = self.__status_tarefa_service.filter_tarefas_pendente(processo, processo.etapa)
-        if not pendentes:
-            nova_etapa = self.__etapa_repository.get_by_ordem(processo.etapa.ordem + 1)
-            processo.etapa = nova_etapa
-
-            self.__repository.update(processo)
-            self.__status_tarefa_service.create_tarefas(processo, nova_etapa)
-
     def list_processos_etapas(self) -> List[dict]:
         response = []
         etapas = self.__etapa_repository.list_processos_by_etapa()

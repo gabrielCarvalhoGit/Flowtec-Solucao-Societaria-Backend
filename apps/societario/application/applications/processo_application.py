@@ -29,15 +29,6 @@ class ProcessoApplication:
 
         return response
     
-    def update(self, request):
-        serializer_request = StatusTarefaRequestSerializer(data=request.data)
-
-        if serializer_request.is_valid():
-            self.__service.update_processo(**serializer_request.validated_data)
-            return 'ok'
-        
-        raise ValidationError(serializer_request.errors)
-    
     def get_processos_etapas(self) -> ProcessoEtapaResponseSerializer:
         processos_etapas = self.__service.list_processos_etapas()
         

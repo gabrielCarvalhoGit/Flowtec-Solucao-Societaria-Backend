@@ -1,7 +1,10 @@
 import uuid
 from typing import Optional, List
 
-from apps.societario.infra.models import Etapa
+from django.db import transaction
+from django.db.models import Prefetch
+
+from apps.societario.infra.models import Etapa, Processo
 
 
 class EtapaRepository:
@@ -20,5 +23,8 @@ class EtapaRepository:
     def list_etapas(self) -> List[Etapa]:
         return self.__model.objects.all().order_by('ordem')
     
+    @transaction.atomic
     def list_processos_by_etapa(self):
-        return self.__model.objects.prefetch_related('processos')
+        return self.__model.objects.prefetch_related(
+            Prefetch('processos', queryset=Processo.objects.order_by('expire_at'))
+        )

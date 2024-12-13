@@ -4,7 +4,6 @@ from .views import etapa_views, tipo_processo_views, processo_views
 
 urlpatterns = [
     path('create-processo/', processo_views.create_processo, name='create_processo'),
-    path('update-processo/', processo_views.update_processo, name='update_processo'),
     path('get-processo/', processo_views.get_processo, name='get_processo'),
     path('list-processos-etapas/', processo_views.list_processos_etapas, name='list_processos_etapas'),
 

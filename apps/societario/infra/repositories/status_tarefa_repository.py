@@ -30,13 +30,6 @@ class StatusTarefaRepository:
         except self.__model.DoesNotExist:
             return None
     
-    def filter_tarefas_pendentes(self, processo, etapa):
-        return self.__model.objects.filter(
-            processo_id=processo.id,
-            etapa_id=etapa.id,
-            concluida=False
-        )
-    
     def filter_status_tarefas(self, processo_id: uuid.UUID) -> List[StatusTarefa]:
         return self.__model.objects.filter(processo_id=processo_id).select_related(
             'tarefa', 

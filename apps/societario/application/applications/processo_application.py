@@ -21,6 +21,14 @@ class ProcessoApplication:
 
         raise ValidationError(serializer_request.errors)
     
+    def update(self, request) -> ProcessoResponseSerializer:
+        serializer_request = StatusTarefaRequestSerializer(data=request.data)
+
+        if serializer_request.is_valid():
+            processo = self.__service.update_processo(**serializer_request.validated_data)
+
+        raise ValidationError(serializer_request.errors)
+
     def get(self, request):
         id = request.query_params.get('processo_id', None)
 

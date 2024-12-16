@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 class TarefaRequestSerializer(serializers.Serializer):
     tarefa_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=True)
-    status = serializers.BooleanField(required=True)
+    concluida = serializers.BooleanField(required=True)
 
     def to_internal_value(self, data):
         allowed_fields = set(self.fields.keys())
@@ -16,6 +16,7 @@ class TarefaRequestSerializer(serializers.Serializer):
 
 class StatusTarefaRequestSerializer(serializers.Serializer):
     processo_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=True)
+    etapa_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=False)
     tarefas = TarefaRequestSerializer(many=True, required=True)
 
     def to_internal_value(self, data):

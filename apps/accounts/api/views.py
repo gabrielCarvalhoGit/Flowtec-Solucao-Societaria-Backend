@@ -5,8 +5,10 @@ from rest_framework import serializers, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .serializers import UserSerializer, CreateUserSerializer, UpdateUserSerializer
 
@@ -68,6 +70,33 @@ class MyTokenObtainPairView(TokenObtainPairView):
         )
 
         return response
+
+class MyTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        refresh_token = request.COOKIES.get('refresh_token')
+
+        if not refresh_token:
+            return Response({"detail": "Refresh token not found in cookies."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            refresh = RefreshToken(refresh_token)
+            access = refresh.access_token
+
+            response = Response({
+                'access': str(access)
+            })
+
+            response.set_cookie(
+                key='access_token',
+                value=access,
+                httponly=True,
+                secure=True,
+                samesite='None'
+            )
+
+            return response
+        except TokenError as e:
+            raise InvalidToken(str(e))
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

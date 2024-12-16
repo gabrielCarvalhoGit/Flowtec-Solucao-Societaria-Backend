@@ -34,4 +34,4 @@ class StatusTarefaRepository:
         return self.__model.objects.filter(processo_id=processo_id).select_related(
             'tarefa', 
             'etapa'
-        ).order_by('sequencia')
+        ).order_by('etapa__ordem', 'sequencia')

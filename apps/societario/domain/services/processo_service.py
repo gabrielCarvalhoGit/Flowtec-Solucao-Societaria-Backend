@@ -50,10 +50,10 @@ class ProcessoService(metaclass=ServiceBase):
         status_tarefas = self.__status_tarefa_service.filter_status_tarefas_processo(processo)
         return ProcessoDetalhadoEntity(
             id=processo.id,
-            contabilidade=ContabilidadeEntity.from_model(processo.contabilidade),
+            contabilidade=processo.contabilidade,
             nome=processo.nome,
-            tipo_processo=TipoProcessoEntity.from_model(processo.tipo_processo),
-            etapa=EtapaEntity.from_model(processo.etapa),
+            tipo_processo=processo.tipo_processo,
+            etapa=processo.etapa,
             tarefas=status_tarefas,
             created_at=processo.created_at,
             expire_at=processo.expire_at
@@ -84,6 +84,16 @@ class ProcessoService(metaclass=ServiceBase):
 
         self.__status_tarefa_service.create_tarefas(response, etapa)
         return response
+
+    @transaction.atomic
+    def update_processo(self, **data) -> ProcessoDetalhadoEntity:
+        processo_id = data.get('processo_id')
+        etapa_id = data.get('etapa_id', None)
+        tarefas = data.get('tarefas')
+
+        processo = self.get_processo(processo_id)
+        etapa = self.__etapa_service.get_etapa(etapa_id) if etapa_id else None
+
 
     def list_processos_etapas(self) -> List[dict]:
         response = []

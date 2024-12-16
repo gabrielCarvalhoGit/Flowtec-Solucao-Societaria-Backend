@@ -35,9 +35,6 @@ class StatusTarefaService(metaclass=ServiceBase):
         ]
         return self.__repository.bulk_create(status_tarefas)
     
-    def update(self, status_tarefa: StatusTarefaEntity):
-        self.__repository.update(status_tarefa)
-    
     def get_tarefa(self, id: uuid.UUID):
         tarefa = self.__repository.get_by_id(id)
         if not tarefa:

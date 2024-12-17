@@ -35,15 +35,14 @@ class StatusTarefaService(metaclass=ServiceBase):
         ]
         return self.__repository.bulk_create(status_tarefas)
     
-    def get_tarefa(self, id: uuid.UUID):
-        tarefa = self.__repository.get_by_id(id)
-        if not tarefa:
-            raise NotFound('Tarefa não encontrada.')
-        
-        return StatusTarefaEntity.from_model(tarefa)
+    def update_status_tarefas(self, tarefas: List[StatusTarefaEntity]):
+        return self.__repository.bulk_update(tarefas)
+    
+    def delete_status_tarefas(self, processo: ProcessoEntity, nova_etapa: EtapaEntity):
+        return self.__repository.interval_delete(processo.id, processo.etapa.ordem, nova_etapa.ordem)
     
     def filter_status_tarefas_processo(self, processo: ProcessoEntity) -> List[StatusTarefaEntity]:
-        status_tarefas = self.__repository.filter_status_tarefas(processo.id)
+        status_tarefas = self.__repository.filter_by_processo(processo.id)
 
         if not status_tarefas:
             raise NotFound('Nenhuma tarefa encontrada para o processo informado.')

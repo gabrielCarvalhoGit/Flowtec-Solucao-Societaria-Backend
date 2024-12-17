@@ -94,6 +94,26 @@ class ProcessoService(metaclass=ServiceBase):
         processo = self.get_processo(processo_id)
         etapa = self.__etapa_service.get_etapa(etapa_id) if etapa_id else None
 
+        validated_tarefas = processo.update_model(tarefas)
+        self.__status_tarefa_service.update_status_tarefas(validated_tarefas)
+
+        if etapa:
+            if etapa.ordem < processo.etapa.ordem:
+                self.__status_tarefa_service.delete_status_tarefas(processo, etapa)
+            elif etapa.ordem > processo.etapa.ordem:
+                self.__status_tarefa_service.create_tarefas(processo, etapa)
+            
+            processo.etapa = etapa
+            self.__repository.update(processo)
+        
+        return ProcessoDetalhadoEntity(
+            contabilidade=processo.contabilidade, 
+            nome=processo.nome, 
+            tipo_processo=processo.tipo_processo, 
+            etapa=processo.etapa, 
+            tarefas=validated_tarefas, 
+            expire_at=processo.expire_at
+        )
 
     def list_processos_etapas(self) -> List[dict]:
         response = []

@@ -3,6 +3,7 @@ from typing import Optional
 
 from apps.societario.infra.models import Processo
 from apps.societario.domain.entities.processo import ProcessoEntity
+from apps.societario.domain.entities.detalhes_processo import ProcessoDetalhadoEntity
 
 
 class ProcessoRepository:
@@ -20,7 +21,7 @@ class ProcessoRepository:
         
         return processo
     
-    def update(self, data: ProcessoEntity):
+    def update(self, data: ProcessoDetalhadoEntity) -> Processo:
         return self.__model.objects.filter(id=data.id).update(etapa_id=data.etapa.id)
     
     def get_by_id(self, processo_id: uuid.UUID) -> Optional[Processo]:

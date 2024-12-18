@@ -105,15 +105,6 @@ class ProcessoService(metaclass=ServiceBase):
             
             processo.etapa = etapa
             self.__repository.update(processo)
-        
-        return ProcessoDetalhadoEntity(
-            contabilidade=processo.contabilidade, 
-            nome=processo.nome, 
-            tipo_processo=processo.tipo_processo, 
-            etapa=processo.etapa, 
-            tarefas=validated_tarefas, 
-            expire_at=processo.expire_at
-        )
 
     def list_processos_etapas(self) -> List[dict]:
         response = []

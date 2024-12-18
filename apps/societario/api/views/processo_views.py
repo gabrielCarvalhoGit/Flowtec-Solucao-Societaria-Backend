@@ -20,7 +20,7 @@ def update_processo(request):
     application = ProcessoApplication()
 
     response = application.update(request)
-    return Response({'processo': response.data}, status=status.HTTP_200_OK)
+    return Response({'detail': response}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

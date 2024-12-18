@@ -11,15 +11,13 @@ class ProcessoRepository:
         self.__model = model
     
     def create(self, data: ProcessoEntity) -> Processo:
-        processo = self.__model.objects.create(
+        return self.__model.objects.create(
             contabilidade_id=data.contabilidade.id,
             nome=data.nome,
             tipo_processo_id = data.tipo_processo.id,
             etapa_id = data.etapa.id,
             expire_at = data.expire_at
         )
-        
-        return processo
     
     def update(self, data: ProcessoDetalhadoEntity) -> Processo:
         return self.__model.objects.filter(id=data.id).update(etapa_id=data.etapa.id)

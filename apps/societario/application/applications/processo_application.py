@@ -25,9 +25,9 @@ class ProcessoApplication:
         serializer_request = StatusTarefaRequestSerializer(data=request.data)
 
         if serializer_request.is_valid():
-            processo = self.__service.update_processo(**serializer_request.validated_data)
-            response = ProcessoResponseSerializer(processo)
+            self.__service.update_processo(**serializer_request.validated_data)
 
+            response = 'OK'
             return response
 
         raise ValidationError(serializer_request.errors)

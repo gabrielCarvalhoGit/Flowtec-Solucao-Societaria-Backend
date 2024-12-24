@@ -1,14 +1,11 @@
 import uuid
-from datetime import datetime
-from dataclasses import dataclass
-from typing import Any, TypeVar, Optional
+from typing import Any, TypeVar
+from dataclasses import dataclass, field
 
 
 @dataclass(kw_only=True)
 class EntityBase:
-    id: Optional[uuid.UUID] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    id: uuid.UUID = field(default_factory=uuid.uuid4)
 
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, type(self)):

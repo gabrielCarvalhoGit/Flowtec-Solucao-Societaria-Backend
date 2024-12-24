@@ -13,11 +13,8 @@ from apps.societario.domain.services.status_tarefa_service import StatusTarefaSe
 from apps.societario.infra.repositories.etapa_repository import EtapaRepository
 from apps.societario.infra.repositories.processo_repository import ProcessoRepository
 
-from apps.societario.domain.entities.etapa import EtapaEntity
 from apps.societario.domain.entities.processo import ProcessoEntity
-from apps.societario.domain.entities.tipo_processo import TipoProcessoEntity
 from apps.societario.domain.entities.detalhes_processo import ProcessoDetalhadoEntity
-from apps.contabilidades.domain.entities.contabilidade_entity import ContabilidadeEntity
 
 
 class ProcessoService(metaclass=ServiceBase):
@@ -77,12 +74,10 @@ class ProcessoService(metaclass=ServiceBase):
             tipo_processo=tipo_processo,
             etapa=etapa
         )
-        processo = self.__repository.create(response)
-
-        response.id = processo.id
-        response.created_at = processo.created_at
-
+        
+        self.__repository.create(response)
         self.__status_tarefa_service.create_tarefas(response, etapa)
+
         return response
 
     @transaction.atomic

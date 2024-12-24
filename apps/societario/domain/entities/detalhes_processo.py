@@ -1,6 +1,6 @@
 from typing import List
-from datetime import date
 from dataclasses import dataclass
+from datetime import date, datetime
 
 from rest_framework.exceptions import ValidationError, NotFound
 
@@ -19,6 +19,7 @@ class ProcessoDetalhadoEntity(EntityBase):
     tipo_processo: TipoProcessoEntity
     etapa: EtapaEntity
     tarefas: List[StatusTarefaEntity]
+    created_at: datetime
     expire_at: date
 
     def update_model(self, tarefas: List[dict]):

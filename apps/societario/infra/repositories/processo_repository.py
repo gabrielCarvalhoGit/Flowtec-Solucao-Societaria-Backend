@@ -10,13 +10,15 @@ class ProcessoRepository:
     def __init__(self, model=Processo):
         self.__model = model
     
-    def create(self, data: ProcessoEntity) -> Processo:
-        return self.__model.objects.create(
+    def create(self, data: ProcessoEntity):
+        self.__model.objects.create(
+            id=data.id,
             contabilidade_id=data.contabilidade.id,
             nome=data.nome,
-            tipo_processo_id = data.tipo_processo.id,
-            etapa_id = data.etapa.id,
-            expire_at = data.expire_at
+            tipo_processo_id=data.tipo_processo.id,
+            etapa_id=data.etapa.id,
+            created_at=data.created_at,
+            expire_at=data.expire_at
         )
     
     def update(self, data: ProcessoDetalhadoEntity) -> Processo:

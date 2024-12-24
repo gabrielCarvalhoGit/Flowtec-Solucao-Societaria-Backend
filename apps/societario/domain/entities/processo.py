@@ -1,7 +1,6 @@
-from typing import List
 from django.utils import timezone
-from datetime import date, timedelta
 from dataclasses import dataclass, field
+from datetime import date, datetime, timedelta
 
 from apps.core.domain.entities.base_entity import EntityBase
 from apps.societario.domain.entities.etapa import EtapaEntity
@@ -16,7 +15,8 @@ class ProcessoEntity(EntityBase):
     nome: str
     tipo_processo: TipoProcessoEntity
     etapa: EtapaEntity
-    expire_at: date = field(default=None)
+    created_at: datetime = field(default_factory=timezone.now)
+    expire_at: date = None
 
     def __post_init__(self):
         if self.expire_at is None:

@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-
 from apps.core.domain.entities.base_entity import EntityBase
 
 

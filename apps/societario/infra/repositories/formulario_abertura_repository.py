@@ -23,8 +23,8 @@ class FormularioAberturaRepository:
     def create(self, data: FormularioAberturaEmpresaEntity):
         self.__endereco_repository.create(data.endereco)
 
-        if data.info_adic.resp_tecnica:
-            self.__info_adicionais_repository.create(data.info_adic)
+        if data.info_adicionais.resp_tecnica:
+            self.__info_adicionais_repository.create(data.info_adicionais)
 
         self.__model.objects.create(
             id=data.id,
@@ -41,6 +41,6 @@ class FormularioAberturaRepository:
             empresa_anexa_resid=data.empresa_anexa_resid,
             endereco_apenas_contato=data.endereco_apenas_contato,
             area_empresa=data.area_empresa,
-            info_adic_id=data.info_adic.id,
+            info_adicionais_id=data.info_adicionais.id,
             created_at=data.created_at
         )

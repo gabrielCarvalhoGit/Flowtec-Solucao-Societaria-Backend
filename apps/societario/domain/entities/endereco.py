@@ -1,16 +1,16 @@
 import re
 import uuid
+from typing import Optional
 from dataclasses import dataclass, field
 from apps.core.domain.entities.base_entity import EntityBase
 
 
 @dataclass(kw_only=True)
-class EnderecoEntity:
-    id: uuid.UUID = field(default_factory=uuid.uuid4)
+class EnderecoEntity(EntityBase):
     rua: str
     numero: int
     bairro: str
-    complemento: str
+    complemento: Optional[str] = field(default=None)
     cep: str
     municipio: str
     uf: str

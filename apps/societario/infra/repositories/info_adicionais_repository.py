@@ -10,7 +10,7 @@ class InfoAdicionaisRepository:
         self.__model.objects.create(
             id=data.id,
             resp_tecnica=data.resp_tecnica,
-            nome_reponsavel=data.nome_reponsavel,
+            nome_responsavel=data.nome_responsavel,
             nmr_carteira_profissional=data.nmr_carteira_profissional,
             uf=data.uf,
             area_resp=data.area_resp

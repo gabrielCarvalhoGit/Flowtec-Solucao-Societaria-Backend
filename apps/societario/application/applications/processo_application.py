@@ -35,7 +35,7 @@ class ProcessoApplication:
     def get(self, request):
         id = request.query_params.get('processo_id', None)
 
-        processo = self.__service.get_processo(id)
+        processo = self.__service.get_detalhes_processo(id)
         response = ProcessoResponseSerializer(processo)
 
         return response

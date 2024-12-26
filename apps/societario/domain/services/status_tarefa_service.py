@@ -38,8 +38,8 @@ class StatusTarefaService(metaclass=ServiceBase):
     def update_status_tarefas(self, tarefas: List[StatusTarefaEntity]):
         return self.__repository.bulk_update(tarefas)
     
-    def delete_status_tarefas(self, processo: ProcessoEntity, nova_etapa: EtapaEntity):
-        return self.__repository.interval_delete(processo.id, processo.etapa.ordem, nova_etapa.ordem)
+    def delete_status_tarefas(self, processo: ProcessoEntity):
+        return self.__repository.delete(processo.id, processo.etapa.id)
     
     def filter_status_tarefas_processo(self, processo: ProcessoEntity) -> List[StatusTarefaEntity]:
         status_tarefas = self.__repository.filter_by_processo(processo.id)

@@ -8,13 +8,13 @@ from rest_framework.exceptions import ValidationError
 
 from apps.core.domain.entities.base_entity import EntityBase
 from apps.societario.domain.entities.endereco import EnderecoEntity
-from apps.societario.domain.entities.detalhes_processo import ProcessoDetalhadoEntity
+from apps.societario.domain.entities.processo import ProcessoEntity
 from apps.societario.domain.entities.info_adicionais import InfoAdicionaisEntity
 
 
 @dataclass(kw_only=True)
 class FormularioAberturaEmpresaEntity(EntityBase):
-    processo: ProcessoDetalhadoEntity
+    processo: ProcessoEntity
     opcoes_nome_empresa: List[str]
     nome_fantasia: str
     endereco: EnderecoEntity
@@ -27,7 +27,7 @@ class FormularioAberturaEmpresaEntity(EntityBase):
     empresa_anexa_resid: bool = False
     endereco_apenas_contato: bool = False
     area_empresa: Decimal = None
-    info_adic: Optional[InfoAdicionaisEntity] = None
+    info_adicionais: Optional[InfoAdicionaisEntity] = None
     created_at: datetime = field(default_factory=timezone.now)
     updated_at: datetime = field(default=None)
 

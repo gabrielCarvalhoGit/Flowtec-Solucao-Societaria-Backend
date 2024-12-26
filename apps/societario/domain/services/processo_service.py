@@ -34,9 +34,27 @@ class ProcessoService(metaclass=ServiceBase):
         self.__etapa_service = etapa_service
         self.__tipo_processo_service = tipo_processo_service
         self.__status_tarefa_service = status_tarefa_service
+
+    def get_processo(self, id: uuid.UUID):
+        if not id:
+            raise ValidationError({'processo_id': ['Parâmetro obrigatório.']})
+        
+        processo = self.__repository.get_by_id(id)
+        if not processo:
+            raise NotFound('Processo não encontrado.')
+        
+        return ProcessoEntity(
+            id=processo.id,
+            contabilidade=processo.contabilidade,
+            nome=processo.nome,
+            tipo_processo=processo.tipo_processo,
+            etapa=processo.etapa,
+            created_at=processo.created_at,
+            expire_at=processo.expire_at
+        )
     
     @transaction.atomic
-    def get_processo(self, id: uuid.UUID) -> ProcessoDetalhadoEntity:
+    def get_detalhes_processo(self, id: uuid.UUID) -> ProcessoDetalhadoEntity:
         if not id:
             raise ValidationError({'processo_id': ['Parâmetro obrigatório.']})
         
@@ -86,7 +104,7 @@ class ProcessoService(metaclass=ServiceBase):
         etapa_id = data.get('etapa_id', None)
         tarefas = data.get('tarefas')
 
-        processo = self.get_processo(processo_id)
+        processo = self.get_detalhes_processo(processo_id)
         etapa = self.__etapa_service.get_etapa(etapa_id) if etapa_id else None
 
         validated_tarefas = processo.update_model(tarefas)
@@ -94,7 +112,7 @@ class ProcessoService(metaclass=ServiceBase):
 
         if etapa:
             if etapa.ordem < processo.etapa.ordem:
-                self.__status_tarefa_service.delete_status_tarefas(processo, etapa)
+                self.__status_tarefa_service.delete_status_tarefas(processo)
             elif etapa.ordem > processo.etapa.ordem:
                 self.__status_tarefa_service.create_tarefas(processo, etapa)
             

@@ -53,16 +53,16 @@ class Endereco(models.Model):
     rua = models.CharField(max_length=80)
     numero = models.IntegerField()
     bairro = models.CharField(max_length=80)
-    complemento = models.CharField(max_length=100)
+    complemento = models.CharField(max_length=100, blank=True, null=True)
     cep = models.CharField(max_length=8)
-    municipio = models.CharField(max_length=80)
+    municipio = models.CharField(max_length=60)
     uf = models.CharField(max_length=2)
 
 class InfoAdicionais(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     resp_tecnica = models.BooleanField(default=False)
-    nome_reponsavel = models.CharField(max_length=80, blank=True, null=True)
+    nome_responsavel = models.CharField(max_length=80, blank=True, null=True)
 
     nmr_carteira_profissional = models.CharField(max_length=11, blank=True, null=True)
     uf = models.CharField(max_length=2, blank=True, null=True)
@@ -90,7 +90,7 @@ class FormularioAberturaEmpresa(models.Model):
     endereco_apenas_contato = models.BooleanField(default=False)
     area_empresa = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
-    info_adic = models.OneToOneField(InfoAdicionais, on_delete=models.CASCADE, blank=True, null=True)
+    info_adicionais = models.OneToOneField(InfoAdicionais, on_delete=models.CASCADE, blank=True, null=True)
 
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField(auto_now=True)

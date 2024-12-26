@@ -37,11 +37,10 @@ class StatusTarefaRepository:
         ]
         return self.__model.objects.bulk_update(status_tarefa_models, ['concluida'])
     
-    def interval_delete(self, processo_id: uuid.UUID, start: int, end: int):
+    def delete(self, processo_id: uuid.UUID, etapa_id: uuid.UUID):
         return self.__model.objects.filter(
             processo_id=processo_id,
-            etapa__ordem__lt=start,
-            etapa__ordem__gte=end
+            etapa_id=etapa_id
         ).delete()
     
     def filter_by_processo(self, processo_id: uuid.UUID) -> List[StatusTarefa]:

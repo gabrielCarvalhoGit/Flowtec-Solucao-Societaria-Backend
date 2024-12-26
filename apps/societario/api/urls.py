@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import etapa_views, tipo_processo_views, processo_views
+from .views import etapa_views, tipo_processo_views, processo_views, formulario_abertura_views
 
 
 urlpatterns = [
@@ -12,5 +12,7 @@ urlpatterns = [
     path('list-etapas/', etapa_views.get_list_etapas, name='list_etapas'),
 
     path('get-tipo-processo/', tipo_processo_views.get_tipo_processo, name='get_tipo_processo'),
-    path('list-tipo-processo/', tipo_processo_views.get_list_tipo_processo, name='list_tipo_processo')
+    path('list-tipo-processo/', tipo_processo_views.get_list_tipo_processo, name='list_tipo_processo'),
+
+    path('create-form-abertura/', formulario_abertura_views.create_form, name='create_form'),
 ]

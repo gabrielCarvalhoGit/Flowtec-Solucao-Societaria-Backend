@@ -1,3 +1,4 @@
+import uuid
 from django.db import transaction
 
 from apps.societario.infra.models import FormularioAberturaEmpresa
@@ -41,6 +42,9 @@ class FormularioAberturaRepository:
             empresa_anexa_resid=data.empresa_anexa_resid,
             endereco_apenas_contato=data.endereco_apenas_contato,
             area_empresa=data.area_empresa,
-            info_adicionais_id=data.info_adicionais.id,
+            info_adicionais_id=data.info_adicionais.id if data.info_adicionais.resp_tecnica else None,
             created_at=data.created_at
         )
+    
+    def exists_by_id(self, form_id: uuid.UUID) -> bool:
+        return self.__model.objects.filter(id=form_id).exists()

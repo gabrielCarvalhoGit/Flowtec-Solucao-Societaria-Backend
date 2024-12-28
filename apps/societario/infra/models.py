@@ -79,7 +79,7 @@ class FormularioAberturaEmpresa(models.Model):
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)
     inscricao_imob = models.CharField(max_length=20)
 
-    telefone = models.CharField(max_length=12)
+    telefone = models.CharField(max_length=11)
     email = models.EmailField(unique=False)
 
     val_capital_social = models.DecimalField(max_digits=10, decimal_places=2)
@@ -131,7 +131,7 @@ class Socio(models.Model):
 
     cpf = models.CharField(max_length=11)
     rg = models.CharField(max_length=14)
-    orgao_expedidor = models.CharField(max_length=8)
+    orgao_expedidor = models.CharField(max_length=10)
     uf = models.CharField(max_length=2)
 
     administrador = models.BooleanField(default=True)

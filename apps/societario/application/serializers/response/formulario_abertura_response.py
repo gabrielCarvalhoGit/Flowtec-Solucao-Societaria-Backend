@@ -15,14 +15,14 @@ class FormularioAberturaResponseSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation.pop('updated_at', None)
+        representation.pop('updated_at')
         
-        endereco = representation.pop('endereco', None)
-        info_adicionais = representation.pop('info_adicionais', None)
+        endereco = representation.pop('endereco')
+        info_adicionais = representation.pop('info_adicionais')
 
         if endereco:
             representation['endereco'] = endereco
-        if info_adicionais:
+        if info_adicionais.get('resp_tecnica'):
             representation['info_adicionais'] = info_adicionais
 
         return representation

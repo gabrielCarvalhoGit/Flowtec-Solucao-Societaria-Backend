@@ -5,6 +5,7 @@ from datetime import date, datetime
 from dataclasses import dataclass, field
 
 from rest_framework.exceptions import ValidationError
+from apps.societario.domain.validators.validator import phone_number_validate
 
 from apps.core.domain.entities.base_entity import EntityBase
 from apps.societario.domain.entities.endereco import EnderecoEntity
@@ -27,11 +28,13 @@ class FormularioAberturaEmpresaEntity(EntityBase):
     empresa_anexa_resid: bool = False
     endereco_apenas_contato: bool = False
     area_empresa: Decimal = None
-    info_adicionais: Optional[InfoAdicionaisEntity] = None
+    info_adicionais: InfoAdicionaisEntity
     created_at: datetime = field(default_factory=timezone.now)
     updated_at: datetime = field(default=None)
 
     def __post_init__(self):
+        self.telefone = phone_number_validate(self.telefone)
+        
         if len(self.opcoes_nome_empresa) != 3:
             raise ValidationError("O campo 'opcoes_nome_empresa' deve conter três opções de nome.")
         

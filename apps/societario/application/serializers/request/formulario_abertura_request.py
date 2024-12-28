@@ -12,7 +12,7 @@ class FormularioAberturaRequestSerializer(serializers.Serializer):
     endereco = EnderecoRequestSerializer()
     inscricao_imob = serializers.CharField(max_length=20)
 
-    telefone = serializers.CharField(max_length=12)
+    telefone = serializers.CharField()
     email = serializers.EmailField()
 
     val_capital_social = serializers.DecimalField(max_digits=10, decimal_places=2)

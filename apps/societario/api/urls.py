@@ -1,5 +1,9 @@
 from django.urls import path
-from .views import etapa_views, tipo_processo_views, processo_views, formulario_abertura_views
+from .views import (etapa_views, 
+                    tipo_processo_views, 
+                    processo_views, 
+                    formulario_abertura_views,
+                    socio_views)
 
 
 urlpatterns = [
@@ -15,4 +19,5 @@ urlpatterns = [
     path('list-tipo-processo/', tipo_processo_views.get_list_tipo_processo, name='list_tipo_processo'),
 
     path('create-form-abertura/', formulario_abertura_views.create_form, name='create_form'),
+    path('create-socios/', socio_views.create_socios, name='create_socios')
 ]

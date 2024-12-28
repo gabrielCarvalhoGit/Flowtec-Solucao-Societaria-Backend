@@ -1,4 +1,5 @@
-from rest_framework.exceptions import ValidationError
+import uuid
+from rest_framework.exceptions import NotFound
 
 from apps.core.services.base_service import ServiceBase
 from apps.societario.domain.services.processo_service import ProcessoService
@@ -35,3 +36,7 @@ class FormularioAberturaService(metaclass=ServiceBase):
 
         self.__repository.create(response)
         return response
+    
+    def exists_form(self, id: uuid.UUID):
+        if not self.__repository.exists_by_id(id):
+            raise NotFound('Formulário não encontrado.')

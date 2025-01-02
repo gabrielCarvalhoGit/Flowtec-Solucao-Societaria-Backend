@@ -46,5 +46,17 @@ class FormularioAberturaRepository:
             created_at=data.created_at
         )
     
+    def get_by_id(self, form_id: uuid.UUID) -> FormularioAberturaEmpresa:
+        try:
+            return self.__model.objects.select_related(
+                'processo',
+                'endereco',
+                'info_adicionais'
+            ).prefetch_related(
+                'socios'
+            ).get(id=form_id)
+        except self.__model.DoesNotExist:
+            return None
+
     def exists_by_id(self, form_id: uuid.UUID) -> bool:
         return self.__model.objects.filter(id=form_id).exists()

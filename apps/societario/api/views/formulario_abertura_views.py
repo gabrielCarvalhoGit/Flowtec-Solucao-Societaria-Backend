@@ -13,3 +13,11 @@ def create_form(request):
 
     response = application.create(request)
     return Response({'formulario': response.data}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_form(request):
+    application = FormularioAberturaApplication()
+
+    response = application.get(request)
+    return Response({'formulario': response.data}, status=status.HTTP_200_OK)

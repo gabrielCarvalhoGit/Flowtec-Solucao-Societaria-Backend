@@ -8,6 +8,7 @@ from rest_framework.exceptions import ValidationError
 from apps.societario.domain.validators.validator import phone_number_validate
 
 from apps.core.domain.entities.base_entity import EntityBase
+from apps.societario.domain.entities.socio import SocioEntity
 from apps.societario.domain.entities.endereco import EnderecoEntity
 from apps.societario.domain.entities.processo import ProcessoEntity
 from apps.societario.domain.entities.info_adicionais import InfoAdicionaisEntity
@@ -29,6 +30,7 @@ class FormularioAberturaEmpresaEntity(EntityBase):
     endereco_apenas_contato: bool = False
     area_empresa: Decimal = None
     info_adicionais: InfoAdicionaisEntity
+    socios: Optional[List[SocioEntity]] = None
     created_at: datetime = field(default_factory=timezone.now)
     updated_at: datetime = field(default=None)
 

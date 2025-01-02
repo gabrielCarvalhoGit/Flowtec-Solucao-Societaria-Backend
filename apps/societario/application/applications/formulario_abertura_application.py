@@ -19,3 +19,11 @@ class FormularioAberturaApplication:
             return response
 
         raise ValidationError(serializer_request.errors)
+    
+    def get(self, request):
+        id = request.query_params.get('form_id', None)
+
+        form = self.__service.get_form(id)
+        response = FormularioAberturaResponseSerializer(form)
+
+        return response

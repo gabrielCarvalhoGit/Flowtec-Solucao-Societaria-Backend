@@ -23,7 +23,7 @@ class SocioRepository:
         endereco_entities = []
 
         for item in data:
-            socio = Socio(
+            socio = self.__model(
                 id=item.id,
                 empresa_id=item.empresa_id,
                 nome=item.nome,

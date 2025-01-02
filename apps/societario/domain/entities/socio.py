@@ -26,7 +26,7 @@ class SocioEntity(EntityBase):
         'conjunto', 'isoladamente', 'nao_aplica'
     ]
 
-    empresa_id: uuid.UUID 
+    empresa_id: uuid.UUID
     nome: str 
     nacionalidade: str 
     data_nascimento: date 

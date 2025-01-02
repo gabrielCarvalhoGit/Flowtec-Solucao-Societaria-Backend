@@ -1,6 +1,5 @@
 import uuid
 from typing import List
-from dataclasses import asdict
 
 from apps.societario.infra.models import StatusTarefa
 from apps.societario.domain.entities.status_tarefa import StatusTarefaEntity
@@ -12,7 +11,7 @@ class StatusTarefaRepository:
 
     def bulk_create(self, data: List[StatusTarefaEntity]) -> List[StatusTarefa]:
         model_instances = [
-            StatusTarefa(
+            self.__model(
                 id=item.id,
                 processo_id=item.processo.id,
                 etapa_id=item.etapa.id,
@@ -26,7 +25,7 @@ class StatusTarefaRepository:
     
     def bulk_update(self, data: List[StatusTarefaEntity]) -> List[StatusTarefa]:
         status_tarefa_models = [
-            StatusTarefa(
+            self.__model(
                 id=item.id,
                 processo_id=item.processo.id,
                 etapa_id=item.etapa.id,

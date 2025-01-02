@@ -47,3 +47,17 @@ class FormularioAberturaEmpresaEntity(EntityBase):
             raise ValidationError("Quando 'endereco_apenas_contato' é True, o campo 'area_empresa' deve ser vazio.") 
         elif not self.endereco_apenas_contato and self.area_empresa is None: 
             raise ValidationError("Quando 'endereco_apenas_contato' é False, o campo 'area_empresa' é obrigatório.")
+    
+    @classmethod
+    def from_model(cls, model_instance) -> "FormularioAberturaEmpresaEntity":
+        model_data = {field.name: getattr(model_instance, field.name) for field in model_instance._meta.fields}
+
+        if model_instance.socios.exists():
+            model_data['socios'] = model_instance.socios.all()
+        else:
+            model_data['socios'] = None
+        
+        entity = cls(**model_data)
+        entity.__post_init__()
+        
+        return entity

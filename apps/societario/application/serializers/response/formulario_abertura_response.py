@@ -28,9 +28,13 @@ class FormularioAberturaResponseSerializer(serializers.ModelSerializer):
         info_adicionais = representation.pop('info_adicionais')
         if info_adicionais and info_adicionais.get('resp_tecnica'):
             representation['info_adicionais'] = info_adicionais
+        else:
+            representation['info_adicionais'] = {'resp_tecnica': False}
 
         socios = representation.pop('socios')
-        if socios is not None or socios != []:
+        if not socios:
+            representation['socios'] = []
+        else:
             representation['socios'] = socios
 
         return representation

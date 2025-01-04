@@ -38,7 +38,7 @@ class SocioEntity(EntityBase):
     orgao_expedidor: str
     uf: str 
     administrador: bool = True 
-    tipo_administrador: str 
+    tipo_administrador: Optional[str] = None
     qtd_cotas: int 
     endereco: EnderecoEntity
     created_at: datetime = field(default_factory=timezone.now)
@@ -62,5 +62,5 @@ class SocioEntity(EntityBase):
             raise ValidationError("Quando 'administrador' é true, o campo 'tipo_administrador' é obrigatório.")
         elif not self.administrador and self.tipo_administrador:
             raise ValidationError("Quando 'administrador' é false, o campo 'tipo_administrador' deve ser vazio.")
-        elif self.tipo_administrador not in self.TIPO_ADMINISTRADOR_CHOICES: 
+        elif self.tipo_administrador and self.tipo_administrador not in self.TIPO_ADMINISTRADOR_CHOICES: 
             raise ValueError(f"Tipo de administrador inválido para o sócio '{self.nome}'. Opções válidas: {', '.join(self.TIPO_ADMINISTRADOR_CHOICES)}")

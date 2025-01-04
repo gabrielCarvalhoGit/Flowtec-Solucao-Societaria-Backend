@@ -135,7 +135,7 @@ class Socio(models.Model):
     uf = models.CharField(max_length=2)
 
     administrador = models.BooleanField(default=True)
-    tipo_administrador = models.CharField(max_length=15, choices=TIPO_ADMINISTRADOR_CHOICES)
+    tipo_administrador = models.CharField(max_length=15, choices=TIPO_ADMINISTRADOR_CHOICES, blank=True, null=True)
 
     qtd_cotas = models.IntegerField()
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)

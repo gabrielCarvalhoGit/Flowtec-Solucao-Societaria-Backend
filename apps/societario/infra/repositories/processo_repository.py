@@ -30,6 +30,8 @@ class ProcessoRepository:
                 'contabilidade',
                 'tipo_processo',
                 'etapa'
+            ).prefetch_related(
+                'formulario_abertura'
             ).get(id=processo_id)
         except self.__model.DoesNotExist:
             return None

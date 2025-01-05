@@ -1,4 +1,5 @@
-from typing import List
+import uuid
+from typing import List, Optional
 from dataclasses import dataclass
 from datetime import date, datetime
 
@@ -19,6 +20,7 @@ class ProcessoDetalhadoEntity(EntityBase):
     tipo_processo: TipoProcessoEntity
     etapa: EtapaEntity
     tarefas: List[StatusTarefaEntity]
+    formulario_abertura_id: Optional[uuid.UUID] = None
     created_at: datetime
     expire_at: date
 

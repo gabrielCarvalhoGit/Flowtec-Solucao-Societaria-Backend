@@ -72,7 +72,7 @@ class InfoAdicionais(models.Model):
 class FormularioAberturaEmpresa(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    processo = models.OneToOneField(Processo, on_delete=models.CASCADE, related_name='formulario')
+    processo = models.OneToOneField(Processo, on_delete=models.CASCADE, related_name='formulario_abertura')
     opcoes_nome_empresa = ArrayField(models.CharField(max_length=120))
     nome_fantasia = models.CharField(max_length=120)
 

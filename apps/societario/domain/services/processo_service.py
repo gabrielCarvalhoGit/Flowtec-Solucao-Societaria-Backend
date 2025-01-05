@@ -70,6 +70,7 @@ class ProcessoService(metaclass=ServiceBase):
             tipo_processo=processo.tipo_processo,
             etapa=processo.etapa,
             tarefas=status_tarefas,
+            formulario_abertura_id=processo.formulario_abertura.id,
             created_at=processo.created_at,
             expire_at=processo.expire_at
         )

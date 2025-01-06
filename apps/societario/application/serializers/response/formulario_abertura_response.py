@@ -19,8 +19,6 @@ class FormularioAberturaResponseSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
 
-        representation.pop('updated_at')
-
         endereco = representation.pop('endereco')
         if endereco:
             representation['endereco'] = endereco

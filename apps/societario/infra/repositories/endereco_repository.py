@@ -20,6 +20,12 @@ class EnderecoRepository:
             uf=data.uf
         )
     
+    def update(self, obj: Endereco, data: EnderecoEntity):
+        for field in obj._meta.fields:
+            setattr(obj, field.name, getattr(data, field.name))
+        
+        obj.save()
+
     def bulk_create(self, data: List[EnderecoEntity]):
         model_instances = [
             self.__model(

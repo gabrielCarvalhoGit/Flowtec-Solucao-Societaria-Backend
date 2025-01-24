@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from apps.societario.application.serializers.request.endereco_request import EnderecoRequestSerializer
-from apps.societario.application.serializers.request.info_adicionais_request import InfoAdicionaisRequestSerializer
+from apps.societario.application.serializers.request.endereco_request import EnderecoRequestSerializer, EnderecoUpdateRequestSerializer
+from apps.societario.application.serializers.request.info_adicionais_request import InfoAdicionaisRequestSerializer, InfoAdicionaisUpdateRequestSerializer
 
 
 class FormularioAberturaCreateRequestSerializer(serializers.Serializer):
@@ -29,18 +29,18 @@ class FormularioAberturaUpdateRequestSerializer(serializers.Serializer):
     opcoes_nome_empresa = serializers.ListField(child=serializers.CharField(max_length=120), required=False)
     nome_fantasia = serializers.CharField(max_length=120, required=False)
 
-    #endereco = EnderecoRequestSerializer(required=False)
+    endereco = EnderecoUpdateRequestSerializer(required=False)
     inscricao_imob = serializers.CharField(max_length=20, required=False)
 
     telefone = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
 
     val_capital_social = serializers.DecimalField(max_digits=10, decimal_places=2, required=False)
-    capital_integralizado = serializers.BooleanField(default=True, required=False)
+    capital_integralizado = serializers.BooleanField(required=False)
     data_integralizacao = serializers.DateField(required=False)
 
-    empresa_anexa_resid = serializers.BooleanField(default=False, required=False)
-    endereco_apenas_contato = serializers.BooleanField(default=False, required=False)
-    area_empresa = serializers.DecimalField(max_digits=10, decimal_places=2, required=False)
+    empresa_anexa_resid = serializers.BooleanField(required=False)
+    endereco_apenas_contato = serializers.BooleanField(required=False)
+    area_empresa = serializers.DecimalField(max_digits=10, decimal_places=2, required=False, allow_null=True)
 
-    #info_adicionais = InfoAdicionaisRequestSerializer(required=False)
+    info_adicionais = InfoAdicionaisUpdateRequestSerializer(required=False)

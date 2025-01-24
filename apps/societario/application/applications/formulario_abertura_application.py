@@ -25,7 +25,10 @@ class FormularioAberturaApplication:
         serializer_request = FormularioAberturaUpdateRequestSerializer(data=request.data)
 
         if serializer_request.is_valid():
-            pass
+            form = self.__service.update_form(id, **serializer_request.validated_data)
+            response = FormularioAberturaResponseSerializer(form)
+
+            return response
 
         raise ValidationError(serializer_request.errors)
     

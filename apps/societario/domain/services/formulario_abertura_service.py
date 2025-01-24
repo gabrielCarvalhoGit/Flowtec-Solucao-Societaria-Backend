@@ -44,6 +44,12 @@ class FormularioAberturaService(metaclass=ServiceBase):
             raise ValidationError({'form_id': ['Parâmetro obrigatório.']})
         
         form = self.__repository.get_by_id(id)
+        response = FormularioAberturaEmpresaEntity.from_model(form)
+
+        response.update(**data)
+        self.__repository.update(form, response)
+
+        return response
     
     def get_form(self, id: uuid.UUID) -> FormularioAberturaEmpresaEntity:
         if not id:

@@ -14,6 +14,14 @@ def create_form(request):
     response = application.create(request)
     return Response({'formulario': response.data}, status=status.HTTP_200_OK)
 
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_form(request):
+    application = FormularioAberturaApplication()
+
+    response = application.update(request)
+    return Response({'formulario': response.data}, status=status.HTTP_200_OK)
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_form(request):

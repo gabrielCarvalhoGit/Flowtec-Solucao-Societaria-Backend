@@ -19,6 +19,7 @@ urlpatterns = [
     path('list-tipo-processo/', tipo_processo_views.get_list_tipo_processo, name='list_tipo_processo'),
 
     path('create-form-abertura/', formulario_abertura_views.create_form, name='create_form'),
+    path('update-form-abertura/', formulario_abertura_views.update_form, name='update_form'),
     path('get-form-abertura/', formulario_abertura_views.get_form, name='get_form'),
     path('create-socios/', socio_views.create_socios, name='create_socios')
 ]

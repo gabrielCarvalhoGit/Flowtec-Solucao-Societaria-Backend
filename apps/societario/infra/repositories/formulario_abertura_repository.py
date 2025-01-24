@@ -46,6 +46,27 @@ class FormularioAberturaRepository:
             created_at=data.created_at
         )
     
+    @transaction.atomic
+    def update(self, obj: FormularioAberturaEmpresa, data: FormularioAberturaEmpresaEntity):
+        if not all(getattr(data.endereco, field) == getattr(obj.endereco, field) for field in vars(data.endereco)):
+            self.__endereco_repository.update(obj.endereco, data.endereco)
+        
+        if not obj.info_adicionais and data.info_adicionais:
+            if data.info_adicionais.resp_tecnica:
+                self.__info_adicionais_repository.create(data.info_adicionais)
+                obj.info_adicionais_id = data.info_adicionais.id
+        elif obj.info_adicionais and not data.info_adicionais.resp_tecnica:
+            self.__info_adicionais_repository.delete(obj.info_adicionais)
+            obj.info_adicionais_id = None
+        elif data.info_adicionais and not all(getattr(data.info_adicionais, field) == getattr(obj.info_adicionais, field) for field in vars(data.info_adicionais)):
+            self.__info_adicionais_repository.update(obj.info_adicionais, data.info_adicionais)
+
+        for field in obj._meta.fields:
+            if field.name not in ['endereco', 'processo', 'info_adicionais']:
+                setattr(obj, field.name, getattr(data, field.name))
+            
+            obj.save()
+
     def get_by_id(self, form_id: uuid.UUID) -> FormularioAberturaEmpresa:
         try:
             return self.__model.objects.select_related(

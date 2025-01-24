@@ -41,16 +41,43 @@ class FormularioAberturaEmpresaEntity(EntityBase):
             raise ValidationError("O campo 'opcoes_nome_empresa' deve conter três opções de nome.")
         
         if not self.capital_integralizado and not self.data_integralizacao:
-            raise ValidationError("O campo 'data_integralizacao' é obrigatório quando o capital não será totalmente integralizado.")
+            raise ValidationError("Quando 'capital_integralizado' é False, o campo 'data_integralizacao' é obrigatório.")
+        elif self.capital_integralizado and self.data_integralizacao:
+            self.data_integralizacao = None
         
-        if self.endereco_apenas_contato and self.area_empresa is not None: 
-            raise ValidationError("Quando 'endereco_apenas_contato' é True, o campo 'area_empresa' deve ser vazio.") 
-        elif not self.endereco_apenas_contato and self.area_empresa is None: 
+        if not self.endereco_apenas_contato and not self.area_empresa: 
             raise ValidationError("Quando 'endereco_apenas_contato' é False, o campo 'area_empresa' é obrigatório.")
+        elif self.endereco_apenas_contato and self.area_empresa:
+            self.area_empresa = None
     
+    def update(self, **data):
+        for field, value in data.items():
+            if field not in self.__dataclass_fields__:
+                continue
+
+            if field == 'endereco' and isinstance(value, dict):
+                self.endereco.update(**value)
+                continue
+            
+            if field == 'info_adicionais' and isinstance(value, dict):
+                if not self.info_adicionais:
+                    self.info_adicionais = InfoAdicionaisEntity(**value)
+                    continue
+                else:
+                    self.info_adicionais.update(**value)
+                    continue
+            
+            setattr(self, field, value)
+        
+        self.__post_init__()
+
     @classmethod
     def from_model(cls, model_instance) -> "FormularioAberturaEmpresaEntity":
         model_data = {field.name: getattr(model_instance, field.name) for field in model_instance._meta.fields}
+        model_data['endereco'] = EnderecoEntity.from_model(model_instance.endereco)
+
+        if model_instance.info_adicionais:
+            model_data['info_adicionais'] = InfoAdicionaisEntity.from_model(model_instance.info_adicionais)
 
         if model_instance.socios.exists():
             model_data['socios'] = model_instance.socios.all()

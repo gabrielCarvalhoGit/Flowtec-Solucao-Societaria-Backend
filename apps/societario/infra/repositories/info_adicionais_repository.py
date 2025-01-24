@@ -15,3 +15,12 @@ class InfoAdicionaisRepository:
             uf=data.uf,
             area_resp=data.area_resp
         )
+    
+    def update(self, obj: InfoAdicionais, data: InfoAdicionaisEntity):
+        for field in obj._meta.fields:
+            setattr(obj, field.name, getattr(data, field.name))
+        
+        obj.save()
+    
+    def delete(self, obj: InfoAdicionais):
+        obj.delete()

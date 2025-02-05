@@ -21,5 +21,7 @@ urlpatterns = [
     path('create-form-abertura/', formulario_abertura_views.create_form, name='create_form'),
     path('update-form-abertura/', formulario_abertura_views.update_form, name='update_form'),
     path('get-form-abertura/', formulario_abertura_views.get_form, name='get_form'),
-    path('create-socios/', socio_views.create_socios, name='create_socios')
+
+    path('create-socios/', socio_views.create_socios, name='create_socios'),
+    path('update-socios/', socio_views.update_socios, name='update_socios'),
 ]

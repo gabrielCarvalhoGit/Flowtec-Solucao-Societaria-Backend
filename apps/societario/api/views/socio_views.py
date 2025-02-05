@@ -13,3 +13,11 @@ def create_socios(request):
 
     response = application.create(request)
     return Response({'socios': response.data}, status=status.HTTP_200_OK)
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_socios(request):
+    application = SocioApplication()
+
+    response = application.update(request)
+    return Response({'socios': response.data}, status=status.HTTP_200_OK)

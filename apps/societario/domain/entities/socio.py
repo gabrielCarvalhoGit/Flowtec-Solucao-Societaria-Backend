@@ -47,7 +47,9 @@ class SocioEntity(EntityBase):
     def __post_init__(self):
         self.cpf = cpf_validate(self.cpf)
         self.rg = re.sub(r'\D', '', self.rg)
-        self.endereco = EnderecoEntity(**self.endereco)
+
+        if not isinstance(self.endereco, EnderecoEntity):
+            self.endereco = EnderecoEntity(**self.endereco)
         
         if self.estado_civil not in self.ESTADO_CIVIL_CHOICES:
             raise ValueError(f"Estado civil inválido para o sócio '{self.nome}'. Opções válidas: {', '.join(self.ESTADO_CIVIL_CHOICES)}")
@@ -64,3 +66,32 @@ class SocioEntity(EntityBase):
             raise ValidationError("Quando 'administrador' é false, o campo 'tipo_administrador' deve ser vazio.")
         elif self.tipo_administrador and self.tipo_administrador not in self.TIPO_ADMINISTRADOR_CHOICES: 
             raise ValueError(f"Tipo de administrador inválido para o sócio '{self.nome}'. Opções válidas: {', '.join(self.TIPO_ADMINISTRADOR_CHOICES)}")
+    
+    def update(self, **data):
+        for field, value in data.items():
+            if field not in self.__dataclass_fields__:
+                continue
+
+            if field == 'endereco' and isinstance(value, dict):
+                self.endereco.update(**value)
+                continue
+
+            setattr(self, field, value)
+        
+        self.__post_init__()
+    
+    @classmethod
+    def from_model(cls, model_instance) -> "SocioEntity":
+        model_data = {}
+        for field in model_instance._meta.fields:
+            if field.name != 'empresa':
+                model_data[field.name] = getattr(model_instance, field.name)
+            else:
+                model_data['empresa_id'] = model_instance.empresa.id
+
+        model_data['endereco'] = EnderecoEntity.from_model(model_instance.endereco)
+
+        entity = cls(**model_data)
+        entity.__post_init__()
+        
+        return entity

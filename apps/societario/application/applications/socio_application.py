@@ -19,3 +19,14 @@ class SocioApplication:
             return response
 
         raise ValidationError(serializer_requrest.errors)
+    
+    def update(self, request):
+        serializer_request = SocioRequestSerializer(data=request.data, partial=True)
+
+        if serializer_request.is_valid():
+            socios = self.__service.update_socios(**serializer_request.validated_data)
+            response = SocioResponseSerializer(socios, many=True)
+
+            return response
+        
+        raise ValidationError(serializer_request.errors)

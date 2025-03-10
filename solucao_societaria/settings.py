@@ -6,7 +6,10 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(override=True)
+ENV = os.getenv('DJANGO_ENV', 'development')
+
+dotenv_path = f'.env.{ENV}'
+load_dotenv(dotenv_path, override=True)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 

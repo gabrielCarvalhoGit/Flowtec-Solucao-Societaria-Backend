@@ -1,6 +1,5 @@
 .env.development
 .env.staging
-
 venv
 media
 **/__pycache__/

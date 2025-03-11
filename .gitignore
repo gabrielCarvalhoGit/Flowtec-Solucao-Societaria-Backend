@@ -1,5 +1,6 @@
 .env.development
 .env.staging
+.env.production
 venv
 media
 **/__pycache__/

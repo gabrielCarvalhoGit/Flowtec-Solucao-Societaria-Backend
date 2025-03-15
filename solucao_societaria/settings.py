@@ -74,7 +74,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 
     'AUTH_COOKIE': 'access_token',
-    #'AUTH_COOKIE_SECURE': False,
+    'AUTH_COOKIE_SECURE': True,
     'AUTH_COOKIE_HTTP_ONLY': True,
     'AUTH_COOKIE_SAMESITE': 'None',
 }
@@ -155,9 +155,12 @@ AUTH_USER_MODEL = 'accounts.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    os.getenv("CORS_ALLOWED_ORIGINS").split(','),
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+SESSION_COOKIE_DOMAIN = '.flowtec.dev'
+CSRF_COOKIE_DOMAIN = '.flowtec.dev'
 
 CNPJ_API_KEY = os.getenv('CNPJ_API_KEY')
 CNPJ_API_URL = os.getenv('CNPJ_API_URL')

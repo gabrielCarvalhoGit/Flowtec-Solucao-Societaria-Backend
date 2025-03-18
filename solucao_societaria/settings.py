@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ENV = os.getenv('DJANGO_ENV', 'development')
+ENV = os.getenv('DJANGO_ENV', 'dev')
 
 dotenv_path = f'.env.{ENV}'
 load_dotenv(dotenv_path, override=True)
@@ -54,6 +54,9 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'apps.core.infra.exception_handler.custom_exception_handler',
 }
 
+COOKIE_DOMAIN = '.flowtec.dev' if ENV == 'prod' else None
+COOKIE_SECURE = ENV == 'prod'
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
@@ -74,9 +77,10 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 
     'AUTH_COOKIE': 'access_token',
-    #'AUTH_COOKIE_SECURE': False,
+    'AUTH_COOKIE_DOMAIN': COOKIE_DOMAIN,
+    'AUTH_COOKIE_SECURE': COOKIE_SECURE,
     'AUTH_COOKIE_HTTP_ONLY': True,
-    'AUTH_COOKIE_SAMESITE': 'None',
+    'AUTH_COOKIE_SAMESITE': 'None' if COOKIE_SECURE else 'Lax',
 }
 
 MIDDLEWARE = [
@@ -154,10 +158,14 @@ AUTH_USER_MODEL = 'accounts.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS").split(',')
 CORS_ALLOW_CREDENTIALS = True
+
+SESSION_COOKIE_DOMAIN = COOKIE_DOMAIN
+CSRF_COOKIE_DOMAIN = COOKIE_DOMAIN
+
+SESSION_COOKIE_SECURE = COOKIE_SECURE
+CSRF_COOKIE_SECURE = COOKIE_SECURE
 
 CNPJ_API_KEY = os.getenv('CNPJ_API_KEY')
 CNPJ_API_URL = os.getenv('CNPJ_API_URL')

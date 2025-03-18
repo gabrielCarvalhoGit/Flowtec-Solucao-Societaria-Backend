@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import authenticate
 
 from rest_framework.response import Response
@@ -48,6 +49,9 @@ class MyTokenObtainPairView(TokenObtainPairView):
         refresh = serializer.validated_data.get('refresh')
         access = serializer.validated_data.get('access')
 
+        cookie_secure = settings.ENV == 'prod'
+        cookie_samesite = 'None' if cookie_secure else 'Lax'
+
         response = Response({
             'refresh': refresh,
             'access': access
@@ -57,16 +61,16 @@ class MyTokenObtainPairView(TokenObtainPairView):
             key='access_token',
             value=access,
             httponly=True,
-            secure=True,
-            samesite='None'
+            secure=cookie_secure,
+            samesite=cookie_samesite
         )
 
         response.set_cookie(
             key='refresh_token',
             value=refresh,
             httponly=True,
-            secure=True,
-            samesite='None'
+            secure=cookie_secure,
+            samesite=cookie_samesite
         )
 
         return response
@@ -82,6 +86,9 @@ class MyTokenRefreshView(TokenRefreshView):
             refresh = RefreshToken(refresh_token)
             access = refresh.access_token
 
+            cookie_secure = settings.ENV == 'prod'
+            cookie_samesite = 'None' if cookie_secure else 'Lax'
+
             response = Response({
                 'access': str(access)
             })
@@ -90,8 +97,8 @@ class MyTokenRefreshView(TokenRefreshView):
                 key='access_token',
                 value=access,
                 httponly=True,
-                secure=True,
-                samesite='None'
+                secure=cookie_secure,
+                samesite=cookie_samesite
             )
 
             return response

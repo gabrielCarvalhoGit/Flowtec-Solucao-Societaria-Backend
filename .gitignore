@@ -1,4 +1,4 @@
-.env.development
+.env.dev
 .env.staging
 .env.production
 venv

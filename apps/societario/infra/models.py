@@ -42,6 +42,7 @@ class StatusTarefa(models.Model):
     etapa = models.ForeignKey(Etapa, on_delete=models.PROTECT, related_name='etapa')
     tarefa = models.ForeignKey(Tarefa, on_delete=models.PROTECT, related_name='status_tarefas')
     concluida = models.BooleanField(default=False)
+    nao_aplicavel = models.BooleanField(default=False)
     sequencia = models.IntegerField()
 
     created_at = models.DateTimeField()

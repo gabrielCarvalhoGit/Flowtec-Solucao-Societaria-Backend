@@ -1,9 +1,11 @@
 from rest_framework import serializers
+from apps.societario.infra.models import StatusTarefa
 
 
 class TarefaRequestSerializer(serializers.Serializer):
-    tarefa_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=True)
+    id = serializers.UUIDField(format='hex_verbose', write_only=True, required=True)
     concluida = serializers.BooleanField(required=True)
+    nao_aplicavel = serializers.BooleanField(required=False, default=False)
 
     def to_internal_value(self, data):
         allowed_fields = set(self.fields.keys())
@@ -11,8 +13,16 @@ class TarefaRequestSerializer(serializers.Serializer):
         for field in data:
             if field not in allowed_fields:
                 raise serializers.ValidationError({field: 'Parâmetro inválido.'})
-            
-        return super().to_internal_value(data)
+        
+        internal_data = super().to_internal_value(data)
+
+        if internal_data.get('concluida') and internal_data.get('nao_aplicavel'):
+            raise serializers.ValidationError({
+                'nao_aplicavel': 'Uma tarefa não pode ser marcada como concluída e não aplicável simultaneamente.'
+            })
+
+        return internal_data
+
 
 class StatusTarefaRequestSerializer(serializers.Serializer):
     processo_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=True)

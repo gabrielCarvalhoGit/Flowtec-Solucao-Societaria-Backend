@@ -11,4 +11,4 @@ class StatusTarefaResponseSerializer(serializers.ModelSerializer):
 
         class Meta:
                 model = StatusTarefa
-                fields = ['id', 'etapa', 'tarefa', 'concluida', 'sequencia']
+                fields = ['id', 'etapa', 'tarefa', 'concluida', 'sequencia', 'nao_aplicavel']

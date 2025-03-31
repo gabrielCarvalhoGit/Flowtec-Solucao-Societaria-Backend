@@ -26,7 +26,7 @@ class ProcessoDetalhadoEntity(EntityBase):
 
     def update_model(self, tarefas: List[dict]):
         ids_processo = set(tarefa.id for tarefa in self.tarefas)
-        ids_tarefas = set(tarefa.get('tarefa_id') for tarefa in tarefas)
+        ids_tarefas = set(tarefa.get('id') for tarefa in tarefas)
 
         invalid_ids = ids_tarefas.difference(ids_processo)
         if invalid_ids:
@@ -35,19 +35,24 @@ class ProcessoDetalhadoEntity(EntityBase):
         updated_tarefas = []
         
         for tarefa in tarefas:
-            tarefa_id = tarefa.get('tarefa_id')
+            tarefa_id = tarefa.get('id')
             tarefa_processo = next((t for t in self.tarefas if t.id == tarefa_id), None)
 
             if tarefa_processo:
                 concluida = tarefa.get('concluida')
+                nao_aplicavel = tarefa.get('nao_aplicavel', False)
                 index_atual = self.tarefas.index(tarefa_processo)
 
+                if concluida and nao_aplicavel:
+                    raise ValidationError('Uma tarefa não pode ser marcada como concluída e não aplicável simultaneamente.')
+
                 if concluida:
-                    if not all(t.concluida for t in self.tarefas[:index_atual]):
+                    if not all(t.concluida or t.nao_aplicavel for t in self.tarefas[:index_atual]):
                         raise ValidationError('O processo possui tarefas pendentes. Não é possível concluir a tarefa informada.')
                 
-                if tarefa_processo.concluida != concluida:
+                if tarefa_processo.concluida != concluida or tarefa_processo.nao_aplicavel != nao_aplicavel:
                     tarefa_processo.concluida = concluida
+                    tarefa_processo.nao_aplicavel = nao_aplicavel
                     self.tarefas[index_atual] = tarefa_processo
                     
                     updated_tarefas.append(tarefa_processo)

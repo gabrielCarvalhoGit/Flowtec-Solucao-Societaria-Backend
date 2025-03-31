@@ -49,9 +49,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
         refresh = serializer.validated_data.get('refresh')
         access = serializer.validated_data.get('access')
 
-        cookie_secure = settings.ENV == 'prod'
-        cookie_samesite = 'None' if cookie_secure else 'Lax'
-
         response = Response({
             'refresh': refresh,
             'access': access
@@ -61,16 +58,17 @@ class MyTokenObtainPairView(TokenObtainPairView):
             key='access_token',
             value=access,
             httponly=True,
-            secure=cookie_secure,
-            samesite=cookie_samesite
+            secure=True,
+            samesite='None'
         )
 
         response.set_cookie(
             key='refresh_token',
             value=refresh,
             httponly=True,
-            secure=cookie_secure,
-            samesite=cookie_samesite
+            secure=True,
+            samesite='None',
+            max_age=60 * 60 * 24 * 90,
         )
 
         return response

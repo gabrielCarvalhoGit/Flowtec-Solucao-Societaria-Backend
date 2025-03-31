@@ -14,6 +14,7 @@ class StatusTarefaEntity(EntityBase):
     etapa: EtapaEntity
     tarefa: TarefaEntity
     concluida: bool = False
+    nao_aplicavel: bool = False
     sequencia: int
     created_at: datetime = field(default_factory=timezone.now)
     updated_at: datetime = field(default=None)

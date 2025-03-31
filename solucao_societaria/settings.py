@@ -18,7 +18,6 @@ DEBUG = os.getenv("DEBUG")
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(',')
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -78,9 +77,9 @@ SIMPLE_JWT = {
 
     'AUTH_COOKIE': 'access_token',
     'AUTH_COOKIE_DOMAIN': COOKIE_DOMAIN,
-    'AUTH_COOKIE_SECURE': COOKIE_SECURE,
+    'AUTH_COOKIE_SECURE': True,
     'AUTH_COOKIE_HTTP_ONLY': True,
-    'AUTH_COOKIE_SAMESITE': 'None' if COOKIE_SECURE else 'Lax',
+    'AUTH_COOKIE_SAMESITE': 'None',
 }
 
 MIDDLEWARE = [
@@ -98,22 +97,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'solucao_societaria.urls'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 WSGI_APPLICATION = 'solucao_societaria.wsgi.application'
 

@@ -8,7 +8,7 @@ def create_etapas():
         {"nome": "Viabilidade", "ordem": 2},
         {"nome": "Registro", "ordem": 3},
         {"nome": "Alvarás", "ordem": 4},
-        {"nome": "Simples/NF", "ordem": 5},
+        {"nome": "Tributação/NF", "ordem": 5},
         {"nome": "Concluído", "ordem": 6},
     ]
 

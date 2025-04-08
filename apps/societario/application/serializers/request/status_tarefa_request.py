@@ -6,6 +6,8 @@ class TarefaRequestSerializer(serializers.Serializer):
     id = serializers.UUIDField(format='hex_verbose', write_only=True, required=True)
     concluida = serializers.BooleanField(required=True)
     nao_aplicavel = serializers.BooleanField(required=False, default=False)
+    expire_at = serializers.DateField(required=False)
+    tipo_tributacao = serializers.CharField(max_length=10, required=False, allow_blank=True)
 
     def to_internal_value(self, data):
         allowed_fields = set(self.fields.keys())

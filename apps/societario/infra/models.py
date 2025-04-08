@@ -36,6 +36,12 @@ class Tarefa(models.Model):
     obrigatoria = models.BooleanField(default=True)
 
 class StatusTarefa(models.Model):
+    TRIBUTACAO_CHOICES = [
+        ('simples', 'Simples Nacional'),
+        ('lucro', 'Lucro Presumido'),
+        ('real', 'Lucro Real'),
+    ]
+    
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     processo = models.ForeignKey(Processo, on_delete=models.PROTECT, related_name='status_tarefa')
@@ -43,6 +49,8 @@ class StatusTarefa(models.Model):
     tarefa = models.ForeignKey(Tarefa, on_delete=models.PROTECT, related_name='status_tarefas')
     concluida = models.BooleanField(default=False)
     nao_aplicavel = models.BooleanField(default=False)
+    expire_at = models.DateField(blank=True, null=True)
+    tipo_tributacao = models.CharField(max_length=10, choices=TRIBUTACAO_CHOICES, null=True, blank=True)
     sequencia = models.IntegerField()
 
     created_at = models.DateTimeField()

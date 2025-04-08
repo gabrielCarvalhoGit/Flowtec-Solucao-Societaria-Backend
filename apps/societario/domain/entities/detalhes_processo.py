@@ -39,8 +39,10 @@ class ProcessoDetalhadoEntity(EntityBase):
             tarefa_processo = next((t for t in self.tarefas if t.id == tarefa_id), None)
 
             if tarefa_processo:
-                concluida = tarefa.get('concluida')
+                concluida = tarefa.get('concluida', None)
                 nao_aplicavel = tarefa.get('nao_aplicavel', False)
+                expire_at = tarefa.get('expire_at', None)
+                tipo_tributacao = tarefa.get('tipo_tributacao', None)
                 index_atual = self.tarefas.index(tarefa_processo)
 
                 if concluida and nao_aplicavel:
@@ -50,11 +52,26 @@ class ProcessoDetalhadoEntity(EntityBase):
                     if not all(t.concluida or t.nao_aplicavel for t in self.tarefas[:index_atual]):
                         raise ValidationError('O processo possui tarefas pendentes. Não é possível concluir a tarefa informada.')
                 
-                if tarefa_processo.concluida != concluida or tarefa_processo.nao_aplicavel != nao_aplicavel:
+                alterado = False
+
+                if tarefa_processo.concluida != concluida:
                     tarefa_processo.concluida = concluida
+                    alterado = True
+
+                if tarefa_processo.nao_aplicavel != nao_aplicavel:
                     tarefa_processo.nao_aplicavel = nao_aplicavel
+                    alterado = True
+
+                if expire_at and tarefa_processo.expire_at != expire_at:
+                    tarefa_processo.expire_at = expire_at
+                    alterado = True
+
+                if tipo_tributacao and tarefa_processo.tipo_tributacao != tipo_tributacao:
+                    tarefa_processo.tipo_tributacao = tipo_tributacao
+                    alterado = True
+
+                if alterado:
                     self.tarefas[index_atual] = tarefa_processo
-                    
                     updated_tarefas.append(tarefa_processo)
             else:
                 raise NotFound(f'Tarefa não encontrada: {str(tarefa_id)}')

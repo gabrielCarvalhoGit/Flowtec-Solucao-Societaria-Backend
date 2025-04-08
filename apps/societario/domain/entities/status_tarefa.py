@@ -29,7 +29,7 @@ class StatusTarefaEntity(EntityBase):
 
     def __post_init__(self):
         if self.tipo_tributacao and self.tipo_tributacao not in self.TIPO_TRIBUTACAO_CHOICES:
-            raise ValueError(f"Tibo de tributação inválida. Opções válidas: {', '.join(self.ESTADO_CIVIL_CHOICES)}")
+            raise ValueError(f"Tibo de tributação inválida. Opções válidas: {', '.join(self.TIPO_TRIBUTACAO_CHOICES)}")
 
     @classmethod
     def from_model(cls, model_instance) -> "StatusTarefaEntity":

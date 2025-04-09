@@ -1,16 +1,21 @@
 services:
   db:
     image: postgres
-    restart: always
-    volumes:
-      - pg_data:/var/lib/postgresql/data
+    container_name: flowtec_postgres
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - flowtec_network
 
   web:
     build: .
+    container_name: flowtec_web
     command: >
       sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
@@ -19,6 +24,12 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    networks:
+      - flowtec_network
 
 volumes:
   pg_data:
+
+networks:
+  flowtec_network:
+    driver: bridge

@@ -115,6 +115,15 @@ class ProcessoService(metaclass=ServiceBase):
             if etapa.ordem < processo.etapa.ordem:
                 self.__status_tarefa_service.delete_status_tarefas(processo)
             elif etapa.ordem > processo.etapa.ordem:
+                if processo.etapa.ordem == 4:
+                    tarefas_obrigatorias = [t for t in processo.tarefas if t.tarefa.obrigatoria]
+                    tarefas_nao_concluidas = [t for t in tarefas_obrigatorias if not t.concluida and not t.nao_aplicavel]
+                    
+                    if tarefas_nao_concluidas:
+                        raise ValidationError({
+                            'tarefas': 'Não é possível avançar para a próxima etapa. Existem tarefas obrigatórias que não foram concluídas ou marcadas como não aplicáveis.'
+                        })
+                
                 self.__status_tarefa_service.create_tarefas(processo, etapa)
             
             processo.etapa = etapa

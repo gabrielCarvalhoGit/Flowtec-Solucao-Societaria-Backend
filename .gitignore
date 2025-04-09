@@ -1,6 +1,7 @@
 .env.dev
-.env.staging
-.env.production
+.env.prod
+uwsgi.ini
+uwsgi_params
 venv
 media
 **/__pycache__/

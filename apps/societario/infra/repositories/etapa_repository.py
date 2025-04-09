@@ -27,4 +27,4 @@ class EtapaRepository:
     def list_processos_by_etapa(self):
         return self.__model.objects.prefetch_related(
             Prefetch('processos', queryset=Processo.objects.order_by('expire_at'))
-        )
+        ).order_by('ordem')

@@ -17,6 +17,7 @@ class StatusTarefaRepository:
                 etapa_id=item.etapa.id,
                 tarefa_id=item.tarefa.id,
                 concluida=item.concluida,
+                nao_aplicavel=item.nao_aplicavel,
                 sequencia=item.sequencia,
                 created_at=item.created_at
             ) for item in data
@@ -31,10 +32,13 @@ class StatusTarefaRepository:
                 etapa_id=item.etapa.id,
                 tarefa_id=item.tarefa.id,
                 concluida=item.concluida,
-                sequencia=item.sequencia
+                nao_aplicavel=item.nao_aplicavel,
+                sequencia=item.sequencia,
+                expire_at = item.expire_at,
+                tipo_tributacao = item.tipo_tributacao
             ) for item in data
         ]
-        return self.__model.objects.bulk_update(status_tarefa_models, ['concluida'])
+        return self.__model.objects.bulk_update(status_tarefa_models, ['concluida', 'nao_aplicavel', 'expire_at', 'tipo_tributacao'])
     
     def delete(self, processo_id: uuid.UUID, etapa_id: uuid.UUID):
         return self.__model.objects.filter(

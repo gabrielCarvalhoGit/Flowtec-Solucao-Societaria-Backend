@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ENV = os.getenv('DJANGO_ENV', 'development')
+ENV = os.getenv('DJANGO_ENV', 'dev')
 
 dotenv_path = f'.env.{ENV}'
 load_dotenv(dotenv_path, override=True)
@@ -18,7 +18,6 @@ DEBUG = os.getenv("DEBUG")
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(',')
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -54,6 +53,9 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'apps.core.infra.exception_handler.custom_exception_handler',
 }
 
+COOKIE_DOMAIN = '.flowtec.dev' if ENV == 'prod' else None
+COOKIE_SECURE = ENV == 'prod'
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
@@ -74,6 +76,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 
     'AUTH_COOKIE': 'access_token',
+    'AUTH_COOKIE_DOMAIN': COOKIE_DOMAIN,
     'AUTH_COOKIE_SECURE': True,
     'AUTH_COOKIE_HTTP_ONLY': True,
     'AUTH_COOKIE_SAMESITE': 'None',
@@ -94,22 +97,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'solucao_societaria.urls'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 WSGI_APPLICATION = 'solucao_societaria.wsgi.application'
 
@@ -153,7 +140,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 AUTH_USER_MODEL = 'accounts.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS").split(',')
+CORS_ALLOW_CREDENTIALS = True
 
+SESSION_COOKIE_DOMAIN = COOKIE_DOMAIN
+CSRF_COOKIE_DOMAIN = COOKIE_DOMAIN
+
+SESSION_COOKIE_SECURE = COOKIE_SECURE
+CSRF_COOKIE_SECURE = COOKIE_SECURE
 CORS_ALLOWED_ORIGINS = [
     os.getenv("CORS_ALLOWED_ORIGINS").split(','),
 ]

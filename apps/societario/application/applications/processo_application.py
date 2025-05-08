@@ -31,6 +31,15 @@ class ProcessoApplication:
             return response
 
         raise ValidationError(serializer_request.errors)
+    
+    def delete(self, request) -> str:
+        process_id = request.query_params.get('id', None)
+
+        if process_id:
+            self.__service.delete_proceso(process_id)
+            return 'Processo excluído com sucesso.'
+
+        raise ValidationError('Id do processo é obrigatório.')
 
     def get(self, request):
         id = request.query_params.get('processo_id', None)

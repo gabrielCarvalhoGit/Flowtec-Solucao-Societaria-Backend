@@ -22,6 +22,14 @@ def update_processo(request):
     response = application.update(request)
     return Response({'detail': response}, status=status.HTTP_200_OK)
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_processo(request):
+    application = ProcessoApplication()
+
+    response = application.delete(request)
+    return Response({'detail': response}, status=status.HTTP_200_OK)
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_processo(request):

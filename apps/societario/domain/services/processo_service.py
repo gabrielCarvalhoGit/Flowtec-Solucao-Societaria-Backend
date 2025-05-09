@@ -128,6 +128,12 @@ class ProcessoService(metaclass=ServiceBase):
             
             processo.etapa = etapa
             self.__repository.update(processo)
+    
+    def delete_proceso(self, id) -> None:
+        if not self.__repository.exists_by_id(id):
+            raise NotFound('Processo não encontrado.')
+
+        self.__repository.delete(id)
 
     def list_processos_etapas(self) -> List[dict]:
         response = []

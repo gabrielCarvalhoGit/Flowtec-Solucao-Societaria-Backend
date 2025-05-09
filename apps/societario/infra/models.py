@@ -44,7 +44,7 @@ class StatusTarefa(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    processo = models.ForeignKey(Processo, on_delete=models.PROTECT, related_name='status_tarefa')
+    processo = models.ForeignKey(Processo, on_delete=models.CASCADE, related_name='status_tarefa')
     etapa = models.ForeignKey(Etapa, on_delete=models.PROTECT, related_name='etapa')
     tarefa = models.ForeignKey(Tarefa, on_delete=models.PROTECT, related_name='status_tarefas')
     concluida = models.BooleanField(default=False)
@@ -85,7 +85,7 @@ class FormularioAberturaEmpresa(models.Model):
     opcoes_nome_empresa = ArrayField(models.CharField(max_length=120))
     nome_fantasia = models.CharField(max_length=120)
 
-    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)
+    endereco = models.OneToOneField(Endereco, on_delete=models.PROTECT)
     inscricao_imob = models.CharField(max_length=20)
 
     telefone = models.CharField(max_length=11)
@@ -99,7 +99,7 @@ class FormularioAberturaEmpresa(models.Model):
     endereco_apenas_contato = models.BooleanField(default=False)
     area_empresa = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
-    info_adicionais = models.OneToOneField(InfoAdicionais, on_delete=models.CASCADE, blank=True, null=True)
+    info_adicionais = models.OneToOneField(InfoAdicionais, on_delete=models.PROTECT, blank=True, null=True)
 
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField(auto_now=True)
@@ -147,7 +147,7 @@ class Socio(models.Model):
     tipo_administrador = models.CharField(max_length=15, choices=TIPO_ADMINISTRADOR_CHOICES, blank=True, null=True)
 
     qtd_cotas = models.IntegerField()
-    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)
+    endereco = models.OneToOneField(Endereco, on_delete=models.PROTECT)
 
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField(auto_now=True)

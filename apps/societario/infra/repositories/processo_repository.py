@@ -24,6 +24,9 @@ class ProcessoRepository:
     def update(self, data: ProcessoDetalhadoEntity) -> Processo:
         return self.__model.objects.filter(id=data.id).update(etapa_id=data.etapa.id)
     
+    def delete(self, processo_id: uuid.UUID):
+        self.__model.objects.filter(id=processo_id).delete()
+
     def get_by_id(self, processo_id: uuid.UUID) -> Optional[Processo]:
         try:
             return self.__model.objects.select_related(
@@ -35,3 +38,6 @@ class ProcessoRepository:
             ).get(id=processo_id)
         except self.__model.DoesNotExist:
             return None
+    
+    def exists_by_id(self, processo_id: uuid.UUID) -> None:
+        return self.__model.objects.filter(id=processo_id).exists()

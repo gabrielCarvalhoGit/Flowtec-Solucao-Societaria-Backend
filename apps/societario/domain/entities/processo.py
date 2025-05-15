@@ -1,3 +1,4 @@
+from typing import Optional
 from django.utils import timezone
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
@@ -15,6 +16,7 @@ class ProcessoEntity(EntityBase):
     nome: str
     tipo_processo: TipoProcessoEntity
     etapa: EtapaEntity
+    observacao: Optional[str] = None
     created_at: datetime = field(default_factory=timezone.now)
     expire_at: date = None
 

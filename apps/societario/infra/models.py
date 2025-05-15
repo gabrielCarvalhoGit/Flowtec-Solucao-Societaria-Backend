@@ -23,6 +23,7 @@ class Processo(models.Model):
 
     tipo_processo = models.ForeignKey(TipoProcesso, on_delete=models.PROTECT, related_name='processos')
     etapa = models.ForeignKey(Etapa, on_delete=models.PROTECT, related_name='processos')
+    observacao = models.TextField(max_length=200, null=True, blank=True)
     
     created_at = models.DateTimeField()
     expire_at = models.DateField()

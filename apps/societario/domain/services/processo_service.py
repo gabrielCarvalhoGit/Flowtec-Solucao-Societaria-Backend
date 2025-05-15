@@ -49,6 +49,7 @@ class ProcessoService(metaclass=ServiceBase):
             nome=processo.nome,
             tipo_processo=processo.tipo_processo,
             etapa=processo.etapa,
+            observacao=processo.observacao,
             created_at=processo.created_at,
             expire_at=processo.expire_at
         )
@@ -69,6 +70,7 @@ class ProcessoService(metaclass=ServiceBase):
             nome=processo.nome,
             tipo_processo=processo.tipo_processo,
             etapa=processo.etapa,
+            observacao=processo.observacao,
             tarefas=status_tarefas,
             formulario_abertura_id=processo.formulario_abertura.id if hasattr(processo, 'formulario_abertura') else None,
             created_at=processo.created_at,
@@ -103,13 +105,15 @@ class ProcessoService(metaclass=ServiceBase):
     def update_processo(self, **data) -> ProcessoDetalhadoEntity:
         processo_id = data.get('processo_id')
         etapa_id = data.get('etapa_id', None)
-        tarefas = data.get('tarefas')
+        tarefas = data.get('tarefas', None)
+        observacao = data.get('observacao', None)
 
         processo = self.get_detalhes_processo(processo_id)
         etapa = self.__etapa_service.get_etapa(etapa_id) if etapa_id else None
 
-        validated_tarefas = processo.update_model(tarefas)
-        self.__status_tarefa_service.update_status_tarefas(validated_tarefas)
+        if tarefas:
+            validated_tarefas = processo.update_model(tarefas)
+            self.__status_tarefa_service.update_status_tarefas(validated_tarefas)
 
         if etapa:
             if etapa.ordem < processo.etapa.ordem:
@@ -127,7 +131,11 @@ class ProcessoService(metaclass=ServiceBase):
                 self.__status_tarefa_service.create_tarefas(processo, etapa)
             
             processo.etapa = etapa
-            self.__repository.update(processo)
+            self.__repository.update_etapa(processo)
+        
+        if observacao:
+            processo.observacao = observacao
+            self.__repository.create_observacao(processo)
     
     def delete_proceso(self, id) -> None:
         if not self.__repository.exists_by_id(id):

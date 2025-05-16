@@ -29,7 +29,7 @@ class TarefaRequestSerializer(serializers.Serializer):
 class StatusTarefaRequestSerializer(serializers.Serializer):
     processo_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=True)
     etapa_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=False)
-    observacao = serializers.CharField(max_length=200, required=False)
+    observacao = serializers.CharField(max_length=200, required=False, allow_blank=True)
     tarefas = TarefaRequestSerializer(many=True, required=False)
 
     def to_internal_value(self, data):

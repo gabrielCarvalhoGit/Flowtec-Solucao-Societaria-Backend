@@ -17,7 +17,7 @@ class ProcessoResponseSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Processo
-        fields = ['id', 'nome', 'contabilidade', 'tipo_processo', 'etapa', 'tarefas', 'formulario_abertura_id', 'created_at', 'expire_at']
+        fields = ['id', 'nome', 'contabilidade', 'tipo_processo', 'etapa', 'observacao', 'tarefas', 'formulario_abertura_id', 'created_at', 'expire_at']
 
 class ProcessoEtapaResponseSerializer(serializers.ModelSerializer):
     processos = ProcessoResponseSerializer(many=True, required=False)

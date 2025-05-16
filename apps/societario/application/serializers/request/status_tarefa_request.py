@@ -29,7 +29,8 @@ class TarefaRequestSerializer(serializers.Serializer):
 class StatusTarefaRequestSerializer(serializers.Serializer):
     processo_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=True)
     etapa_id = serializers.UUIDField(format='hex_verbose', write_only=True, required=False)
-    tarefas = TarefaRequestSerializer(many=True, required=True)
+    observacao = serializers.CharField(max_length=200, required=False)
+    tarefas = TarefaRequestSerializer(many=True, required=False)
 
     def to_internal_value(self, data):
         allowed_fields = set(self.fields.keys())
@@ -38,10 +39,4 @@ class StatusTarefaRequestSerializer(serializers.Serializer):
             if field not in allowed_fields:
                 raise serializers.ValidationError({field: 'Parâmetro inválido.'})
         
-        internal_data = super().to_internal_value(data)
-
-        tarefas = internal_data.get('tarefas')
-        if not tarefas:
-            raise serializers.ValidationError({'tarefas': 'Este campo não pode ser vazio.'})
-
-        return internal_data
+        return super().to_internal_value(data)

@@ -21,8 +21,11 @@ class ProcessoRepository:
             expire_at=data.expire_at
         )
     
-    def update(self, data: ProcessoDetalhadoEntity) -> Processo:
+    def update_etapa(self, data: ProcessoDetalhadoEntity) -> Processo:
         return self.__model.objects.filter(id=data.id).update(etapa_id=data.etapa.id)
+    
+    def create_observacao(self, data: ProcessoDetalhadoEntity) -> Processo:
+        return self.__model.objects.filter(id=data.id).update(observacao=data.observacao)
     
     def delete(self, processo_id: uuid.UUID):
         self.__model.objects.filter(id=processo_id).delete()

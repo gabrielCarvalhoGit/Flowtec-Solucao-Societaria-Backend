@@ -19,6 +19,7 @@ class ProcessoDetalhadoEntity(EntityBase):
     nome: str
     tipo_processo: TipoProcessoEntity
     etapa: EtapaEntity
+    observacao: Optional[str] = None
     tarefas: List[StatusTarefaEntity]
     formulario_abertura_id: Optional[uuid.UUID] = None
     created_at: datetime
